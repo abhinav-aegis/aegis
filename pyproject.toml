@@ -5,16 +5,46 @@ description = "Enterprise Grade AI agents stack"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi>=0.115.8",
-    "pydantic>=2.10.6",
-    "sqlalchemy>=2.0.38",
+    "fastapi[standard]<1.0.0,>=0.114.2",
+    "python-multipart<1.0.0,>=0.0.7",
+    "email-validator<3.0.0.0,>=2.1.0.post1",
+    "passlib[bcrypt]<2.0.0,>=1.7.4",
+    "tenacity<9.0.0,>=8.2.3",
+    "pydantic>2.0",
+    "emails<1.0,>=0.6",
+    "jinja2<4.0.0,>=3.1.4",
+    "alembic<2.0.0,>=1.12.1",
+    "httpx<1.0.0,>=0.25.1",
+    "psycopg[binary]<4.0.0,>=3.1.13",
+    "sqlmodel<1.0.0,>=0.0.21",
+    # Pin bcrypt until passlib supports the latest
+    "bcrypt==4.0.1",
+    "pydantic-settings<3.0.0,>=2.2.1",
+    "sentry-sdk[fastapi]<2.0.0,>=1.40.6",
+    "pyjwt<3.0.0,>=2.8.0",
+    "redis[hiredis]>=5.2.1",
+]
+
+[project.optional-dependencies]
+proxy = [
+    "litellm>=1.61.8",
+]
+agents = [
+    "crewai>=0.95.0",
+]
+data-pipeline = [
+    "dask>=2025.2.0",
 ]
 
 [dependency-groups]
 dev = [
     "ipdb>=0.13.13",
     "ipykernel>=6.29.5",
-    "mypy>=1.15.0",
-    "pytest>=8.3.4",
-    "ruff>=0.9.6",
+    "pytest<8.0.0,>=7.4.3",
+    "mypy<2.0.0,>=1.8.0",
+    "ruff<1.0.0,>=0.2.2",
+    "pre-commit<4.0.0,>=3.6.2",
+    "types-passlib<2.0.0.0,>=1.7.7.20240106",
+    "coverage<8.0.0,>=7.4.3",
+    "bandit>=1.8.3",
 ]
