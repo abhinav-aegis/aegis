@@ -14,7 +14,7 @@ from .utils.uuid6 import uuid7
 #         return cls.__name__.lower()
 
 
-class BaseUUIDModel(SQLModel, table=True):
+class BaseUUIDModel(SQLModel):
     """
     Common Base Model for all tables with a UUID primary key.
     """

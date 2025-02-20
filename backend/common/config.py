@@ -20,7 +20,7 @@ def parse_cors(v: Any) -> list[str] | str:
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file="../.env",  # Read environment variables from .env
+        env_file="../deployment/local/.env",  # Read environment variables from .env
         env_ignore_empty=True,
         extra="ignore",
     )
@@ -45,10 +45,10 @@ class Settings(BaseSettings):
         ]
 
     # Database settings
-    POSTGRES_SERVER: str = "postgres"
+    POSTGRES_SERVER: str = "localhost"
     POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str = "postgres"
-    POSTGRES_PASSWORD: str = "password"
+    POSTGRES_USER: str = "postgresuser"
+    POSTGRES_PASSWORD: str = "mysecretpass"
     POSTGRES_DB: str = "aegis"
 
     @computed_field # type: ignore[misc]
