@@ -3,6 +3,7 @@ from .common_exception import (
     IdNotFoundException,
     NameExistException,
     NameNotFoundException,
+    InternalServerErrorException
 )
 from .user_exceptions import UserSelfDeleteException
 from .user_follow_exceptions import (
@@ -20,4 +21,5 @@ __all__ = [
     "SelfFollowedException",
     "UserFollowedException",
     "UserNotFollowedException",
+    "InternalServerErrorException",
 ]

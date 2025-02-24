@@ -1,7 +1,7 @@
 from backend.common.models.base_uuid_model import BaseUUIDModel
 from pydantic import computed_field
 from sqlmodel import SQLModel
-# from gateway import api
+# from backend.gateway import api
 
 
 class MediaBase(SQLModel):

@@ -23,12 +23,15 @@ dependencies = [
     "redis[hiredis]>=5.2.1",
     "sqlalchemy-utils>=0.41.2",
     "fastapi-pagination>=0.12.34",
-    "fastapi-cache>=0.1.0",
     "fastapi-async-sqlalchemy>=0.6.1",
     "fastapi-limiter>=0.1.6",
     "minio>=7.2.15",
     "asyncpg>=0.30.0",
     "cryptography>=44.0.1",
+    "celery>=5.4.0",
+    "asyncer>=0.0.8",
+    "fastapi-cache2>=0.2.2",
+    "oso>=0.27.3",
 ]
 
 [project.optional-dependencies]
@@ -37,6 +40,8 @@ proxy = [
 ]
 agents = [
     "crewai>=0.95.0",
+    "langchain>=0.3.19",
+    "langchain-community>=0.3.18",
 ]
 data-pipeline = [
     "dask>=2025.2.0",

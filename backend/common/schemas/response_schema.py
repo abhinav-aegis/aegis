@@ -1,5 +1,5 @@
 from math import ceil
-from typing import Any, Generic, TypeVar, Dict
+from typing import Any, Generic, TypeVar, Dict, Optional
 from collections.abc import Sequence
 from fastapi_pagination import Params, Page
 from fastapi_pagination.bases import AbstractPage, AbstractParams
@@ -38,7 +38,7 @@ class IGetResponsePaginated(AbstractPage[T], Generic[T]):
         items: Sequence[T],
         total: int,
         params: AbstractParams,
-    ) -> "IGetResponsePaginated" | None:
+    ) -> Optional["IGetResponsePaginated"]:
         if hasattr(params, "size") and  params.size is not None and total is not None and params.size != 0:
             pages = ceil(total / params.size)
         else:

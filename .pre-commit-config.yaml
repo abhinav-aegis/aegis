@@ -49,6 +49,8 @@ repos:
         exclude: ^(backend/migrations/|backend/.*/tests/)
         args:
           - --explicit-package-bases
+          - --disable-error-code=import-not-found
+          - --disable-error-code=import-untyped
 
   # docformatter - format docstrings
   - repo: https://github.com/pycqa/docformatter

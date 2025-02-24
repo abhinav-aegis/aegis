@@ -9,7 +9,7 @@ oso = Oso()  # (2)
 oso.register_class(Hero)
 oso.register_class(User)
 
-oso.load_files(["common/core/authz.polar"])
+oso.load_files(["backend/common/core/authz.polar"])
 
 
 def is_authorized(actor: User, action: str, resource, **kwargs):
