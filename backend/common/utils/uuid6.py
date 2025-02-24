@@ -41,7 +41,7 @@ class UUID(uuid.UUID):
                 version=version,
                 is_safe=is_safe,
             )
-        if int is None or (not 0 <= int < 1 << 128):
+        if int is None or not 0 <= int < 1 << 128:
             raise ValueError("int is out of range (need a 128-bit value)")
         if version is not None:
             if not 6 <= version <= 7:

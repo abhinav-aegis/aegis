@@ -28,13 +28,24 @@ repos:
         name: mypy
         additional_dependencies:
           - uv
+          - fastapi
           - types-requests
           - types-pytz
+          - types-Pillow
           - types-python-dateutil
           - types-redis
           - sqlmodel
           - pydantic-settings
           - celery-stubs
+          - minio
+          - pyjwt
+          - fastapi_pagination
+          - fastapi_async_sqlalchemy
+          - fastapi_cache
+          - oso
+          - sqlalchemy_utils
+          - celery_sqlalchemy_scheduler
+          - bcrypt
         exclude: ^(backend/migrations/|backend/.*/tests/)
         args:
           - --explicit-package-bases
