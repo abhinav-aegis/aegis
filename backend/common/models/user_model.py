@@ -3,7 +3,7 @@ from backend.common.models.links_model import LinkGroupUser
 from backend.common.models.image_media_model import ImageMedia
 from backend.common.schemas.common_schema import IGenderEnum
 from datetime import datetime
-from sqlmodel import BigInteger, Field, SQLModel, Relationship, Column, DateTime, String
+from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String
 from typing import Optional
 from sqlalchemy_utils import ChoiceType # type: ignore
 from pydantic import EmailStr
@@ -50,10 +50,4 @@ class User(BaseUUIDModel, UserBase, table=True):
             "lazy": "joined",
             "primaryjoin": "User.image_id==ImageMedia.id",
         }
-    )
-    follower_count: int | None = Field(
-        default=None, sa_column=Column(BigInteger(), server_default="0")
-    )
-    following_count: int | None = Field(
-        default=None, sa_column=Column(BigInteger(), server_default="0")
     )

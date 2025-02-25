@@ -25,7 +25,6 @@ dependencies = [
     { name = "fastapi-pagination" },
     { name = "httpx" },
     { name = "minio" },
-    { name = "oso" },
     { name = "passlib", extra = ["bcrypt"] },
     { name = "psycopg", extra = ["binary"] },
     { name = "pydantic" },
@@ -86,7 +85,6 @@ requires-dist = [
     { name = "langchain-community", marker = "extra == 'agents'", specifier = ">=0.3.18" },
     { name = "litellm", marker = "extra == 'proxy'", specifier = ">=1.61.8" },
     { name = "minio", specifier = ">=7.2.15" },
-    { name = "oso", specifier = ">=0.27.3" },
     { name = "passlib", extras = ["bcrypt"], specifier = ">=1.7.4,<2.0.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.1.13,<4.0.0" },
     { name = "pydantic", specifier = ">2.0" },
@@ -2327,21 +2325,6 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/cc/d3/6dc91156cf12ed86bed383bcb942d84d23304a1e57b7ab030bf60ea130d6/orjson-3.10.15-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:eca81f83b1b8c07449e1d6ff7074e82e3fd6777e588f1a6632127f286a968825", size = 129826 },
     { url = "https://files.pythonhosted.org/packages/b3/38/c47c25b86f6996f1343be721b6ea4367bc1c8bc0fc3f6bbcd995d18cb19d/orjson-3.10.15-cp313-cp313-win32.whl", hash = "sha256:c03cd6eea1bd3b949d0d007c8d57049aa2b39bd49f58b4b2af571a5d3833d890", size = 142542 },
     { url = "https://files.pythonhosted.org/packages/27/f1/1d7ec15b20f8ce9300bc850de1e059132b88990e46cd0ccac29cbf11e4f9/orjson-3.10.15-cp313-cp313-win_amd64.whl", hash = "sha256:fd56a26a04f6ba5fb2045b0acc487a63162a958ed837648c5781e1fe3316cfbf", size = 133444 },
-]
-
-[[package]]
-name = "oso"
-version = "0.27.3"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "cffi" },
-]
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/49/de6018fd0712fbf9acb5be92978fa48c3e95845d15f6eaefa1a1999b7974/oso-0.27.3-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:8233c2abab7f751b9e4c31c9ec860af3c936e627ce475285b74dfa4812e4f279", size = 1804956 },
-    { url = "https://files.pythonhosted.org/packages/41/db/1e641055b541ec81e16bcaf56c1232d5586329a49d431be48a1d8ca90dcb/oso-0.27.3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:a2a4e3dc889bec8d286898fea2f533e596663c0b788106d984c754a0c6b01fa5", size = 1822614 },
-    { url = "https://files.pythonhosted.org/packages/3b/99/d00dbd5d1aa7212da973ada5a88b8d62b3c6d018070e6014235546c8924d/oso-0.27.3-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0f93315bbb1988c58db0c9ae12c24aefb5e3d15ef2f80126a36cbbbfe060ef2b", size = 2922042 },
-    { url = "https://files.pythonhosted.org/packages/a5/ee/949e7e663ef28550673e6f688a095044fc55c4f546518b3e1e5e2a244e0c/oso-0.27.3-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:e54ef0e7066e152e065f6659f5cf1ff0cd823e9fd6b700a8d231a864e4224746", size = 2957955 },
-    { url = "https://files.pythonhosted.org/packages/df/15/fbc15fb635ebca661ddd6f47bd3c48a4c88102bd29d53c72a5aac8dbd69c/oso-0.27.3-cp312-cp312-win_amd64.whl", hash = "sha256:afec309535235b374e741827a853bf5caa33f1926e3375a1fe45ba291f638175", size = 956614 },
 ]
 
 [[package]]

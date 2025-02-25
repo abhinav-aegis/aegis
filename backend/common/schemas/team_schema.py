@@ -1,4 +1,3 @@
-from backend.common.models.hero_model import HeroBase
 from backend.common.models.team_model import TeamBase
 from .user_schema import IUserBasicInfo
 from backend.common.utils.partial import optional
@@ -14,11 +13,6 @@ class ITeamCreate(TeamBase):
 class ITeamUpdate(TeamBase):
     pass
 
-
 class ITeamRead(TeamBase):
     id: UUID
     created_by: IUserBasicInfo
-
-
-class ITeamReadWithHeroes(ITeamRead):
-    heroes: list[HeroBase]

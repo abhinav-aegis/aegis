@@ -31,16 +31,12 @@ class IUserRead(UserBase):
     role: IRoleRead | None = None
     groups: list[IGroupReadBasic] | None = []
     image: IImageMediaRead | None
-    follower_count: int | None = 0
-    following_count: int | None = 0
 
 
 class IUserReadWithoutGroups(UserBase):
     id: UUID
     role: IRoleRead | None = None
     image: IImageMediaRead | None
-    follower_count: int | None = 0
-    following_count: int | None = 0
 
 
 class IUserBasicInfo(BaseModel):
