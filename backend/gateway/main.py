@@ -112,7 +112,7 @@ app = FastAPI(
 
 app.add_middleware(
     SQLAlchemyMiddleware,
-    db_url=str(settings.ASYNC_DATABASE_URI),
+    db_url=str(settings.ASYNC_DATABASE_URI) if settings.MODE != ModeEnum.testing else str(settings.ASYNC_TEST_DATABASE_URI),
     engine_args={
         "echo": False,
         "poolclass": NullPool
@@ -154,11 +154,7 @@ class CustomException(Exception):
 
 @app.get("/")
 async def root():
-    """
-    An example "Hello world" FastAPI route.
-    """
-    # if oso.is_allowed(user, "read", message):
-    return {"message": "Hello World"}
+    return {"gateway": True}
 
 
 @app.websocket("/chat/{user_id}")

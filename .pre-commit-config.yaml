@@ -82,7 +82,7 @@ repos:
         args:
           - -r
           - --exclude
-          - backend/migrations,backend/agents/tests,backend/data-pipeline/tests,backend/gateway/tests,backend/proxy/tests,backend/common/tests
+          - backend/migrations,backend/tests
           - backend
 
   # prettier - for JS, CSS, JSON, Markdown

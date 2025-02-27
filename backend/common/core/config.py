@@ -52,6 +52,22 @@ class Settings(BaseSettings):
                 )
         return v
 
+    ASYNC_TEST_DATABASE_URI: PostgresDsn | str = ""
+
+    @field_validator("ASYNC_TEST_DATABASE_URI", mode="after")
+    def assemble_test_db_connection(cls, v: str | None, info: FieldValidationInfo) -> Any:
+        if isinstance(v, str):
+            if v == "":
+                return PostgresDsn.build(
+                    scheme="postgresql+asyncpg",
+                    username=info.data["DATABASE_USER"],
+                    password=info.data["DATABASE_PASSWORD"],
+                    host=info.data["DATABASE_HOST"],
+                    port=info.data["DATABASE_PORT"],
+                    path=info.data["DATABASE_NAME"]+"_test",
+                )
+        return v
+
     SYNC_CELERY_DATABASE_URI: PostgresDsn | str = ""
 
     @field_validator("SYNC_CELERY_DATABASE_URI", mode="after")

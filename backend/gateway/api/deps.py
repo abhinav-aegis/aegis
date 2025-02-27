@@ -11,7 +11,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from backend.common import crud
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token
-from backend.common.db.session import SessionLocal, SessionLocalCelery
+from backend.common.db.session import SessionLocalCelery
 from backend.common.models.user_model import User
 from backend.common.schemas.common_schema import IMetaGeneral, TokenType, IRoleRead
 from backend.common.utils.minio_client import MinioClient
@@ -31,9 +31,9 @@ async def get_redis_client() -> Redis:
     return redis
 
 
-async def get_db() -> AsyncGenerator[AsyncSession, None]:
-    async with SessionLocal() as session:
-        yield session
+# async def get_db() -> AsyncGenerator[AsyncSession, None]:
+#     async with SessionLocal() as session:
+#         yield session
 
 
 async def get_jobs_db() -> AsyncGenerator[AsyncSession, None]:

@@ -4,7 +4,7 @@ from logging.config import fileConfig
 import asyncio
 from sqlalchemy.ext.asyncio import create_async_engine
 from alembic import context
-from backend.common.core.config import settings  # Import your SQLAlchemy engine
+from backend.common.core.config import ModeEnum, settings  # Import your SQLAlchemy engine
 from sqlmodel import SQLModel  # Import SQLModel for metadata
 from backend.common.models import * # noqa
 from backend.gateway.models import * # noqa
@@ -20,7 +20,7 @@ fileConfig(config.config_file_name)
 
 target_metadata = SQLModel.metadata
 
-db_url = str(settings.ASYNC_DATABASE_URI)
+db_url = str(settings.ASYNC_DATABASE_URI) if settings.MODE != ModeEnum.testing else str(settings.ASYNC_TEST_DATABASE_URI)
 
 def run_migrations_offline():
     """

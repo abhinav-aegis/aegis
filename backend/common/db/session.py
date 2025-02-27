@@ -12,7 +12,9 @@ POOL_SIZE = max(DB_POOL_SIZE // WEB_CONCURRENCY, 5)
 connect_args = {"check_same_thread": False}
 
 engine = create_async_engine(
-    str(settings.ASYNC_DATABASE_URI),
+    str(settings.ASYNC_DATABASE_URI) if
+    settings.MODE != ModeEnum.testing
+    else str(settings.ASYNC_TEST_DATABASE_URI),
     echo=False,
     poolclass=NullPool
     if settings.MODE == ModeEnum.testing
