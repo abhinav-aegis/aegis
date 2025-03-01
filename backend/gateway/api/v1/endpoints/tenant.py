@@ -1,6 +1,7 @@
 from backend.common.utils.exceptions import (
     ContentNoChangeException,
     NameExistException,
+    IdNotFoundException,
 )
 from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Params
@@ -18,8 +19,9 @@ from backend.common.schemas.response_schema import (
 )
 from backend.common.schemas.tenant_schema import ITenantCreate, ITenantRead, ITenantUpdate
 from backend.common.schemas.role_schema import IRoleEnum
-router = APIRouter()
+from uuid import UUID
 
+router = APIRouter()
 
 @router.get("")
 async def get_tenants(
@@ -88,3 +90,23 @@ async def update_tenant(
 
     updated_tenant = await crud.tenant.update(obj_current=current_tenant, obj_new=tenant)
     return create_response(data=updated_tenant) # type: ignore
+
+
+@router.delete("/{tenant_id}")
+async def delete_tenant(
+    tenant_id: UUID,
+    current_user: User = Depends(
+        deps.get_current_user(required_roles=[IRoleEnum.admin])
+    ),
+) -> IGetResponseBase[ITenantRead]:
+    """
+    Deletes a tenant by its id.
+
+    Required roles:
+    - admin
+    """
+    current_tenant = await crud.tenant.get(id=tenant_id)
+    if not current_tenant:
+        raise IdNotFoundException(Tenant, id=tenant_id)
+    tenant = await crud.tenant.remove(id=tenant_id)
+    return create_response(data=tenant) # type: ignore

@@ -7,7 +7,8 @@ from backend.gateway.api.v1.endpoints import (
     role,
     group,
     cache,
-    tenant
+    tenant,
+    m2m_client
     # weather,
     # periodic_tasks,
 )
@@ -20,11 +21,7 @@ api_router.include_router(user.router, prefix="/user", tags=["user"])
 api_router.include_router(group.router, prefix="/group", tags=["group"])
 api_router.include_router(team.router, prefix="/team", tags=["team"])
 api_router.include_router(cache.router, prefix="/cache", tags=["cache"])
-# api_router.include_router(weather.router, prefix="/weather", tags=["weather"])
-# api_router.include_router(report.router, prefix="/report", tags=["report"])
+api_router.include_router(m2m_client.router, prefix="/m2m_client", tags=["m2m_client"])
 api_router.include_router(
     natural_language.router, prefix="/natural_language", tags=["natural_language"]
 )
-# api_router.include_router(
-#     periodic_tasks.router, prefix="/periodic_tasks", tags=["periodic_tasks"]
-# )

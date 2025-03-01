@@ -134,6 +134,10 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str = secrets.token_urlsafe(32)
     ENCRYPT_KEY: str = secrets.token_urlsafe(32)
+
+    INTERNAL_AUTH_ALGORITHM: str = "HS256"
+    INTERNAL_AUTH_SECRET: str = secrets.token_urlsafe(32)
+
     BACKEND_CORS_ORIGINS: list[str] | list[AnyHttpUrl]
 
     @field_validator("BACKEND_CORS_ORIGINS")
