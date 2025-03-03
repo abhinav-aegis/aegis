@@ -1,9 +1,13 @@
 from collections.abc import AsyncGenerator
 from typing import Callable, Optional, Awaitable
+from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel, OAuthFlowClientCredentials
 
 import redis.asyncio as aioredis
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2
+from fastapi.security.utils import get_authorization_scheme_param
+from starlette.requests import Request
+from starlette.status import HTTP_401_UNAUTHORIZED
 from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from redis.asyncio import Redis
 from sqlmodel.ext.asyncio.session import AsyncSession
@@ -12,11 +16,41 @@ from backend.common import crud
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token
 from backend.common.db.session import SessionLocalCelery
-from backend.common.models.user_model import User
-from backend.common.schemas.common_schema import IMetaGeneral, TokenType, IRoleRead
+from backend.common.models.m2m_client_model import M2MClient
+from backend.common.schemas.common_schema import IMetaGeneral, TokenType, IRoleRead, TokenSubjectType
 from backend.common.utils.token import get_valid_tokens
 
-reusable_oauth2 = OAuth2PasswordBearer(
+class Oauth2ClientCredentials(OAuth2):
+    def __init__(
+        self,
+        tokenUrl: str,
+        scheme_name: str | None = None,
+        scopes: dict | None = None,
+        auto_error: bool = True,
+    ):
+        if not scopes:
+            scopes = {}
+        flows = OAuthFlowsModel(
+            clientCredentials=OAuthFlowClientCredentials(tokenUrl=tokenUrl, scopes=scopes)
+        )
+
+        super().__init__(flows=flows, scheme_name=scheme_name, auto_error=auto_error)
+
+    async def __call__(self, request: Request) -> Optional[str]:
+        authorization: str | None = request.headers.get("Authorization")
+        scheme, param = get_authorization_scheme_param(authorization)
+        if not authorization or scheme.lower() != "bearer":
+            if self.auto_error:
+                raise HTTPException(
+                    status_code=HTTP_401_UNAUTHORIZED,
+                    detail="Not authenticated",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+            else:
+                return None
+        return param
+
+reusable_oauth2 = Oauth2ClientCredentials(
     tokenUrl=f"{settings.API_V1_STR}/auth/access-token"
 )
 
@@ -45,11 +79,11 @@ async def get_general_meta() -> IMetaGeneral:
     role_list = [IRoleRead.model_validate(role) for role in current_roles]
     return IMetaGeneral(roles=role_list)
 
-def get_current_user(required_roles: Optional[list[str]] = None) -> Callable[[], Awaitable[User]]:
-    async def current_user(
+def get_current_client(required_roles: Optional[list[str]] = None) -> Callable[[], Awaitable[M2MClient]]:
+    async def current_client(
         access_token: str = Depends(reusable_oauth2),
         redis_client: Redis = Depends(get_redis_client),
-    ) -> User:
+    ) -> M2MClient:
         try:
             payload = decode_token(access_token)
         except ExpiredSignatureError:
@@ -68,34 +102,22 @@ def get_current_user(required_roles: Optional[list[str]] = None) -> Callable[[],
                 detail="There is no required field in your token. Please contact the administrator.",
             )
 
-        user_id = payload["sub"]
+        id = payload["sub"]
         valid_access_tokens = await get_valid_tokens(
-            redis_client, user_id, TokenType.ACCESS
+            redis_client, id, TokenType.ACCESS, token_subject_type=TokenSubjectType.CLIENT
         )
         if valid_access_tokens and access_token not in valid_access_tokens:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Could not validate credentials",
             )
-        user: User | None = await crud.user.get(id=user_id)
-        if not user:
+        client: M2MClient | None = await crud.m2m_client.get(id=id)
+        if not client:
             raise HTTPException(status_code=404, detail="User not found")
 
-        if not user.is_active:
+        if not client.is_active:
             raise HTTPException(status_code=400, detail="Inactive user")
 
-        if required_roles:
-            is_valid_role = False
-            for role in required_roles:
-                if role and user.role and role == user.role.name:
-                    is_valid_role = True
+        return client
 
-            if not is_valid_role:
-                raise HTTPException(
-                    status_code=403,
-                    detail=f"""Role "{required_roles}" is required for this action""",
-                )
-
-        return user
-
-    return current_user
+    return current_client

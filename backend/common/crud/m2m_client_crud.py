@@ -8,7 +8,7 @@ from uuid import UUID
 
 class CRUDM2MClient(CRUDBase[M2MClient, IM2MClientCreate, IM2MClientUpdate]):
     async def get_by_client_id(
-        self, *, client_id: UUID | str, db_session: AsyncSession | None = None
+        self, *, client_id: UUID, db_session: AsyncSession | None = None
     ) -> M2MClient | None:
         db_session = db_session or super().get_db_session()
         clients = await db_session.execute(select(M2MClient).where(M2MClient.client_id == client_id))
@@ -25,20 +25,20 @@ class CRUDM2MClient(CRUDBase[M2MClient, IM2MClientCreate, IM2MClientUpdate]):
         await db_session.refresh(db_obj)
         return db_obj
 
-    async def authenticate(self, *, client_id: str, secret: str) -> M2MClient | None:
+    async def authenticate(self, *, client_id: UUID, client_secret: str) -> M2MClient | None:
         client = await self.get_by_client_id(client_id=client_id)
         if not client or not client.hashed_secret:
             return None
-        if not verify_password(secret, client.hashed_secret):
+        if not verify_password(client_secret, client.hashed_secret):
             return None
         return client
 
     async def remove_by_client_id(
-        self, *, client_id: UUID | str, db_session: AsyncSession | None = None
+        self, *, client_id: UUID , db_session: AsyncSession | None = None
     ) -> M2MClient:
         db_session = db_session or super().get_db_session()
         response = await db_session.execute(
-            select(M2MClient).where(M2MClient.client_id ==client_id)
+            select(M2MClient).where(M2MClient.client_id == client_id)
         )
 
         obj = response.scalar_one_or_none()

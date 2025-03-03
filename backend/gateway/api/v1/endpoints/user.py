@@ -1,27 +1,19 @@
-from io import BytesIO
 from typing import Annotated
 from uuid import UUID
 from backend.common.utils.exceptions import (
-    UserSelfDeleteException,
-    InternalServerErrorException
+    UserSelfDeleteException
 )
 from backend.common import crud
 from backend.gateway.api import deps
 from backend.common.deps import user_deps
 from backend.common.models import User
 from backend.common.models.role_model import Role
-from backend.common.utils.minio_client import MinioClient
-from backend.common.utils.resize_image import modify_image
 from fastapi import (
     APIRouter,
-    Body,
     Depends,
-    File,
     Query,
-    UploadFile,
     status
 )
-from backend.common.schemas.media_schema import IMediaCreate
 from backend.common.schemas.response_schema import (
     IDeleteResponseBase,
     IGetResponseBase,
@@ -189,76 +181,3 @@ async def remove_user(
 
     user = await crud.user.remove(id=user_id)
     return create_response(data=user, message="User removed") # type: ignore
-
-
-@router.post("/image")
-async def upload_my_image(
-    title: str | None = Body(None),
-    description: str | None = Body(None),
-    image_file: UploadFile = File(...),
-    current_user: User = Depends(deps.get_current_user()),
-    minio_client: MinioClient = Depends(deps.minio_auth),
-) -> IPostResponseBase[IUserRead]:
-    """
-    Uploads a user image.
-    """
-    try:
-        image_modified = modify_image(BytesIO(image_file.file.read()))
-        data_file = minio_client.put_object(
-            file_name=image_file.filename,
-            file_data=BytesIO(image_modified.file_data),
-            content_type=image_file.content_type,
-        )
-        print("data_file", data_file)
-        media = IMediaCreate(
-            title=title, description=description, path=data_file.file_name
-        )
-        user = await crud.user.update_photo(
-            user=current_user,
-            image=media,
-            heigth=image_modified.height,
-            width=image_modified.width,
-            file_format=image_modified.file_format,
-        )
-        return create_response(data=user) # type: ignore
-    except Exception as e:
-        raise InternalServerErrorException(detail=str(e))
-
-
-@router.post("/{user_id}/image")
-async def upload_user_image(
-    user: User = Depends(user_deps.is_valid_user),
-    title: str | None = Body(None),
-    description: str | None = Body(None),
-    image_file: UploadFile = File(...),
-    current_user: User = Depends(
-        deps.get_current_user(required_roles=[IRoleEnum.admin])
-    ),
-    minio_client: MinioClient = Depends(deps.minio_auth),
-) -> IPostResponseBase[IUserRead]:
-    """
-    Uploads a user image by his/her id.
-
-    Required roles:
-    - admin
-    """
-    try:
-        image_modified = modify_image(BytesIO(image_file.file.read()))
-        data_file = minio_client.put_object(
-            file_name=image_file.filename,
-            file_data=BytesIO(image_modified.file_data),
-            content_type=image_file.content_type,
-        )
-        media = IMediaCreate(
-            title=title, description=description, path=data_file.file_name
-        )
-        user = await crud.user.update_photo(
-            user=user,
-            image=media,
-            heigth=image_modified.height,
-            width=image_modified.width,
-            file_format=image_modified.file_format,
-        )
-        return create_response(data=user) # type: ignore
-    except Exception as e:
-        raise InternalServerErrorException(detail=str(e))

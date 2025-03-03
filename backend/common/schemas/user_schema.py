@@ -4,7 +4,6 @@ from backend.common.models.group_model import GroupBase
 from pydantic import BaseModel
 from uuid import UUID
 from enum import Enum
-from .image_media_schema import IImageMediaRead
 from .role_schema import IRoleRead
 from .tenant_schema import ITenantRead
 
@@ -30,14 +29,12 @@ class IUserRead(UserBase):
     tenant: ITenantRead
     role: IRoleRead | None = None
     groups: list[IGroupReadBasic] | None = []
-    image: IImageMediaRead | None
 
 
 class IUserReadWithoutGroups(UserBase):
     id: UUID
     tenant: ITenantRead
     role: IRoleRead | None = None
-    image: IImageMediaRead | None
 
 
 class IUserBasicInfo(BaseModel):

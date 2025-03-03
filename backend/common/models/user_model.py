@@ -1,6 +1,5 @@
 from backend.common.models.base_uuid_model import BaseUUIDModel
 from backend.common.models.links_model import LinkGroupUser
-from backend.common.models.image_media_model import ImageMedia
 from backend.common.schemas.common_schema import IGenderEnum
 from datetime import datetime
 from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String, ForeignKey
@@ -50,11 +49,4 @@ class User(BaseUUIDModel, UserBase, table=True):
         back_populates="users",
         link_model=LinkGroupUser,
         sa_relationship_kwargs={"lazy": "selectin"},
-    )
-    image_id: UUID | None = Field(default=None, foreign_key="ImageMedia.id")
-    image: ImageMedia = Relationship(
-        sa_relationship_kwargs={
-            "lazy": "joined",
-            "primaryjoin": "User.image_id==ImageMedia.id",
-        }
     )

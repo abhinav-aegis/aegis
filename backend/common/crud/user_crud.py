@@ -1,8 +1,5 @@
-from backend.common.schemas.media_schema import IMediaCreate
 from backend.common.schemas.user_schema import IUserCreate, IUserUpdate
 from backend.common.models.user_model import User
-from backend.common.models.media_model import Media
-from backend.common.models.image_media_model import ImageMedia
 from backend.common.core.security import verify_password, get_password_hash
 from pydantic.networks import EmailStr
 from backend.common.crud.base_crud import CRUDBase
@@ -58,27 +55,6 @@ class CRUDUser(CRUDBase[User, IUserCreate, IUserUpdate]):
             return None
         if not verify_password(password, user.hashed_password):
             return None
-        return user
-
-    async def update_photo(
-        self,
-        *,
-        user: User,
-        image: IMediaCreate,
-        heigth: int,
-        width: int,
-        file_format: str,
-    ) -> User:
-        db_session = super().get_db_session()
-        user.image = ImageMedia(
-            media=Media.model_validate(image),
-            height=heigth,
-            width=width,
-            file_format=file_format,
-        )
-        db_session.add(user)
-        await db_session.commit()
-        await db_session.refresh(user)
         return user
 
     async def remove(
