@@ -11,7 +11,7 @@ from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
 #from transformers import pipeline
 
 from backend.common.deps.service_deps import get_redis_client
-from backend.agents.api.v1.api import api_router as api_router_v1
+from backend.data.api.v1.api import api_router as api_router_v1
 from backend.common.core.config import ModeEnum, settings
 from backend.common.utils.fastapi_globals import GlobalsMiddleware, g
 
