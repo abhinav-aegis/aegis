@@ -3,6 +3,7 @@ import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 from httpx import ASGITransport, AsyncClient
 from backend.gateway.main import app
+from backend.agents.main import app as app_agents
 from backend.common.db.session import SessionLocal, engine as async_engine
 from backend.common.db.init_db import init_db
 from backend.common.core.config import settings
@@ -82,6 +83,17 @@ async def client() -> AsyncGenerator:
     """
     async with AsyncClient(
         transport=ASGITransport(app=app),
+        base_url=f"http://{settings.API_V1_STR}"  # ✅ Automatically adds `/v1` or other API version
+    ) as c:
+        yield c
+
+@pytest.fixture
+async def app_client() -> AsyncGenerator:
+    """
+    Fixture for an HTTP client accessing the `/v1` API (automatically versioned).
+    """
+    async with AsyncClient(
+        transport=ASGITransport(app=app_agents),
         base_url=f"http://{settings.API_V1_STR}"  # ✅ Automatically adds `/v1` or other API version
     ) as c:
         yield c

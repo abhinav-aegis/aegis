@@ -1,9 +1,9 @@
 from collections.abc import AsyncGenerator
-from typing import Callable, Optional, Awaitable
+from typing import Callable, Optional, Awaitable, List
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel, OAuthFlowClientCredentials
 
 import redis.asyncio as aioredis
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
 from starlette.requests import Request
@@ -17,7 +17,7 @@ from backend.common.core.config import settings
 from backend.common.core.security import decode_token
 from backend.common.db.session import SessionLocalCelery
 from backend.common.models.m2m_client_model import M2MClient
-from backend.common.schemas.common_schema import IMetaGeneral, TokenType, IRoleRead, TokenSubjectType
+from backend.common.schemas.common_schema import TokenType, TokenSubjectType
 from backend.common.utils.token import get_valid_tokens
 
 class Oauth2ClientCredentials(OAuth2):
@@ -68,12 +68,6 @@ async def get_jobs_db() -> AsyncGenerator[AsyncSession, None]:
     async with SessionLocalCelery() as session:
         yield session
 
-
-async def get_general_meta() -> IMetaGeneral:
-    current_roles = await crud.role.get_multi(skip=0, limit=100)
-    role_list = [IRoleRead.model_validate(role) for role in current_roles]
-    return IMetaGeneral(roles=role_list)
-
 def get_current_client(required_roles: Optional[list[str]] = None) -> Callable[[], Awaitable[M2MClient]]:
     async def current_client(
         access_token: str = Depends(reusable_oauth2),
@@ -116,3 +110,11 @@ def get_current_client(required_roles: Optional[list[str]] = None) -> Callable[[
         return client
 
     return current_client
+
+async def get_request_context(
+    x_user_id: Optional[str] = Header(None, alias="X-User-ID"),
+    x_tenant_id: Optional[str] = Header(None, alias="X-Tenant-ID"),
+    x_groups: Optional[str] = Header(None, alias="X-Groups"),
+) -> dict:
+    groups: List[str] = [grp.strip() for grp in x_groups.split(",")] if x_groups else []
+    return {"user_id": x_user_id, "tenant_id": x_tenant_id, "groups": groups}

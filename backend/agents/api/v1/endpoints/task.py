@@ -10,5 +10,7 @@ router = APIRouter()
 async def get_tasks_list(
     params: Params = Depends(),
     current_user: User = Depends(service_deps.get_current_client()),
+    context: dict = Depends(service_deps.get_request_context)
 ):
+    print(context)
     return {"message": "Hello World"}

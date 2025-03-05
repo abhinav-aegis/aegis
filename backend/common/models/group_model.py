@@ -1,16 +1,20 @@
-from sqlmodel import Field, Relationship, SQLModel
+from sqlmodel import Field, Relationship, SQLModel, Column, ForeignKey
 from .links_model import LinkGroupUser
 from backend.common.models.base_uuid_model import BaseUUIDModel
 from uuid import UUID
+from typing import Optional
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from backend.common.models.user_model import User
-
+    from backend.common.models.tenant_model import Tenant
 
 class GroupBase(SQLModel):
     name: str
     description: str
+    tenant_id: UUID = Field(
+        sa_column=Column(ForeignKey("Tenant.id"), nullable=False, index=True)
+    )
 
 
 class Group(BaseUUIDModel, GroupBase, table=True):
@@ -25,4 +29,7 @@ class Group(BaseUUIDModel, GroupBase, table=True):
         back_populates="groups",
         link_model=LinkGroupUser,
         sa_relationship_kwargs={"lazy": "selectin"},
+    )
+    tenant: Optional["Tenant"] = Relationship(
+        back_populates="groups", sa_relationship_kwargs={"lazy": "joined"}
     )

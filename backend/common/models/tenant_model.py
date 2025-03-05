@@ -4,6 +4,7 @@ from backend.common.models.base_uuid_model import BaseUUIDModel
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from backend.common.models.user_model import User
+    from backend.common.models.group_model import Group
 
 class TenantBase(SQLModel):
     """
@@ -15,5 +16,8 @@ class TenantBase(SQLModel):
 
 class Tenant(BaseUUIDModel, TenantBase, table=True):
     users: list["User"] = Relationship(
+        back_populates="tenant", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+    groups: list["Group"] = Relationship(
         back_populates="tenant", sa_relationship_kwargs={"lazy": "selectin"}
     )

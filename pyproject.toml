@@ -38,9 +38,13 @@ proxy = [
     "litellm>=1.61.8",
 ]
 agents = [
+    "autogen>=0.7.6",
+    "autogen-ext[component-schema-gen,gen-component-schema]>=0.4.7",
+    "autogenstudio>=0.4.1.11",
     "crewai>=0.95.0",
     "langchain>=0.3.19",
     "langchain-community>=0.3.18",
+    "smolagents>=1.9.2",
 ]
 data-pipeline = [
     "dask>=2025.2.0",
