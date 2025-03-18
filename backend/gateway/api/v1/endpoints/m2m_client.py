@@ -3,7 +3,7 @@ from backend.common.utils.exceptions import (
 )
 from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Params
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.common.models.m2m_client_model import M2MClient
 from backend.common.models.user_model import User
@@ -15,7 +15,7 @@ from backend.common.schemas.response_schema import (
 )
 from backend.common.schemas.m2m_client_schema import IM2MClientCreate, IM2MClientRead
 from uuid import UUID
-from backend.common.schemas.role_schema import IRoleEnum
+from backend.gateway.schema.role_schema import IRoleEnum
 
 router = APIRouter()
 

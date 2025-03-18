@@ -3,9 +3,9 @@ from uuid import UUID
 from backend.common.utils.exceptions import (
     UserSelfDeleteException
 )
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api import deps
-from backend.common.deps import user_deps
+from backend.gateway.deps import user_deps
 from backend.common.models import User
 from backend.common.models.role_model import Role
 from fastapi import (
@@ -21,8 +21,8 @@ from backend.common.schemas.response_schema import (
     IPostResponseBase,
     create_response,
 )
-from backend.common.schemas.role_schema import IRoleEnum
-from backend.common.schemas.user_schema import (
+from backend.gateway.schema.role_schema import IRoleEnum
+from backend.gateway.schema.user_schema import (
     IUserCreate,
     IUserRead,
     IUserReadWithoutGroups,

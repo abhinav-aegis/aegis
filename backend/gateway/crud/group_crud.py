@@ -1,6 +1,6 @@
 from backend.common.models.group_model import Group
 from backend.common.models.user_model import User
-from backend.common.schemas.group_schema import IGroupCreate, IGroupUpdate
+from backend.gateway.schema.group_schema import IGroupCreate, IGroupUpdate
 from backend.common.crud.base_crud import CRUDBase
 from sqlmodel import select
 from uuid import UUID

@@ -6,17 +6,17 @@ from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from pydantic import EmailStr
 from redis.asyncio import Redis
 
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.gateway.api.deps import get_redis_client
 from backend.common.core import security
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token, get_password_hash, verify_password
 from backend.common.models.user_model import User
-from backend.common.schemas.user_schema import IUserRead
-from backend.common.schemas.common_schema import IMetaGeneral, TokenType
+from backend.gateway.schema.user_schema import IUserRead
+from backend.gateway.schema.common_schema import IMetaGeneral, TokenType
 from backend.common.schemas.response_schema import IPostResponseBase, create_response
-from backend.common.schemas.token_schema import RefreshToken, Token, TokenRead
+from backend.gateway.schema.token_schema import RefreshToken, Token, TokenRead
 from backend.common.utils.token import add_token_to_redis, delete_tokens, get_valid_tokens
 
 router = APIRouter()

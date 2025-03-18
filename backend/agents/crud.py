@@ -16,7 +16,7 @@ from backend.agents.schemas import (
     IMessageCreate, IMessageUpdate,
     IRegistryCreate, IRegistryUpdate
 )
-from backend.common.schemas.common_schema import IOrderEnum
+from backend.gateway.schema.common_schema import IOrderEnum
 
 class CRUDTask(CRUDBase[Task, ITaskCreate, ITaskUpdate, Task]):
     async def get_task_by_name(

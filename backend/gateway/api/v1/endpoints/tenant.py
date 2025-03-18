@@ -5,9 +5,9 @@ from backend.common.utils.exceptions import (
 )
 from fastapi import APIRouter, Depends, status
 from fastapi_pagination import Params
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api import deps
-from backend.common.deps import tenant_deps
+from backend.gateway.deps import tenant_deps
 from backend.common.models.tenant_model import Tenant
 from backend.common.models.user_model import User
 from backend.common.schemas.response_schema import (
@@ -17,8 +17,8 @@ from backend.common.schemas.response_schema import (
     IPutResponseBase,
     create_response,
 )
-from backend.common.schemas.tenant_schema import ITenantCreate, ITenantRead, ITenantUpdate
-from backend.common.schemas.role_schema import IRoleEnum
+from backend.gateway.schema.tenant_schema import ITenantCreate, ITenantRead, ITenantUpdate
+from backend.gateway.schema.role_schema import IRoleEnum
 from uuid import UUID
 
 router = APIRouter()

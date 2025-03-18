@@ -1,4 +1,4 @@
-from backend.common.schemas.role_schema import IRoleCreate, IRoleUpdate
+from backend.gateway.schema.role_schema import IRoleCreate, IRoleUpdate
 from backend.common.models.role_model import Role
 from backend.common.models.user_model import User
 from backend.common.crud.base_crud import CRUDBase

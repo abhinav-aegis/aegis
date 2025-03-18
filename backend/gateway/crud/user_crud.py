@@ -1,4 +1,4 @@
-from backend.common.schemas.user_schema import IUserCreate, IUserUpdate
+from backend.gateway.schema.user_schema import IUserCreate, IUserUpdate
 from backend.common.models.user_model import User
 from backend.common.core.security import verify_password, get_password_hash
 from pydantic.networks import EmailStr

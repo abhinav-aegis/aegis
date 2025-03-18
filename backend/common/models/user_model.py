@@ -1,6 +1,6 @@
 from backend.common.models.base_uuid_model import BaseUUIDModel
 from backend.common.models.links_model import LinkGroupUser
-from backend.common.schemas.common_schema import IGenderEnum
+from backend.gateway.schema.common_schema import IGenderEnum
 from datetime import datetime
 from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String
 from typing import Optional

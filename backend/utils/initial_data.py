@@ -1,5 +1,5 @@
 import asyncio
-from backend.common.db.init_db import init_db
+from backend.utils.init_db import init_db
 from backend.common.db.session import SessionLocal
 import logging
 

@@ -12,12 +12,12 @@ from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from redis.asyncio import Redis
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from backend.common import crud
+from backend.gateway import crud
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token
 from backend.common.db.session import SessionLocalCelery
 from backend.common.models.m2m_client_model import M2MClient
-from backend.common.schemas.common_schema import TokenType, TokenSubjectType
+from backend.gateway.schema.common_schema import TokenType, TokenSubjectType
 from backend.common.utils.token import get_valid_tokens
 
 class Oauth2ClientCredentials(OAuth2):

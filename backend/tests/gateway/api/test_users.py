@@ -1,6 +1,6 @@
 import pytest
 from httpx import AsyncClient
-from backend.common.crud import role as role_crud, tenant as tenant_crud, user as user_crud
+from backend.gateway.crud import role as role_crud, tenant as tenant_crud, user as user_crud
 from backend.common.core.config import settings
 
 @pytest.fixture(scope="module")
@@ -40,7 +40,7 @@ async def test_get_user_by_id(authenticated_client: AsyncClient, session):
     Retrieve the first superuser's ID from the database before testing.
     """
 
-    from backend.common.crud import user as user_crud  # Import CRUD functions
+    from backend.gateway.crud import user as user_crud  # Import CRUD functions
 
     # Fetch the first superuser from the database
     admin_user = await user_crud.get_by_email(
@@ -60,7 +60,7 @@ async def test_create_user_1(authenticated_client: AsyncClient, session):
     Retrieve role_id and tenant_id dynamically instead of assuming settings values.
     """
 
-    from backend.common.crud import role as role_crud, tenant as tenant_crud
+    from backend.gateway.crud import role as role_crud, tenant as tenant_crud
 
     role = await role_crud.get_role_by_name(name="user", db_session=session)
     tenant = await tenant_crud.get_tenant_by_name(name="tenant1", db_session=session)
@@ -99,7 +99,7 @@ async def test_delete_user(authenticated_client: AsyncClient, session):
     Retrieve the user ID dynamically before deleting.
     """
 
-    from backend.common.crud import role as role_crud, tenant as tenant_crud
+    from backend.gateway.crud import role as role_crud, tenant as tenant_crud
 
     role = await role_crud.get_role_by_name(name="user", db_session=session)
     tenant = await tenant_crud.get_tenant_by_name(name="tenant1", db_session=session)
@@ -132,7 +132,7 @@ async def test_delete_user_forbidden(authenticated_client: AsyncClient, session)
     Retrieve admin user ID before testing deletion permissions.
     """
 
-    from backend.common.crud import user as user_crud
+    from backend.gateway.crud import user as user_crud
 
     # Get admin user ID dynamically
     admin_user = await user_crud.get_by_email(

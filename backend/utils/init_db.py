@@ -1,8 +1,8 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
-from backend.common import crud
-from backend.common.schemas.user_schema import IUserCreate
-from backend.common.schemas.role_schema import IRoleCreate
-from backend.common.schemas.tenant_schema import ITenantCreate
+from backend.gateway import crud
+from backend.gateway.schema.user_schema import IUserCreate
+from backend.gateway.schema.role_schema import IRoleCreate
+from backend.gateway.schema.tenant_schema import ITenantCreate
 from backend.common.schemas.m2m_client_schema import IM2MClientCreate
 from backend.common.core.config import settings
 from typing import List, Dict

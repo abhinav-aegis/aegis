@@ -1,7 +1,7 @@
 from fastapi import HTTPException
 from typing import Any, Generic, TypeVar
 from uuid import UUID
-from backend.common.schemas.common_schema import IOrderEnum
+from backend.gateway.schema.common_schema import IOrderEnum
 from fastapi_pagination.ext.sqlmodel import paginate
 from fastapi_async_sqlalchemy import db
 from fastapi_pagination import Params, Page

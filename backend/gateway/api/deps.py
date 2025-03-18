@@ -8,12 +8,12 @@ from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from redis.asyncio import Redis
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-from backend.common import crud
+from backend.gateway import crud
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token
 from backend.common.db.session import SessionLocalCelery
 from backend.common.models.user_model import User
-from backend.common.schemas.common_schema import IMetaGeneral, TokenType, IRoleRead
+from backend.gateway.schema.common_schema import IMetaGeneral, TokenType, IRoleRead
 from backend.common.utils.minio_client import MinioClient
 from backend.common.utils.token import get_valid_tokens
 

@@ -1,4 +1,4 @@
-from backend.common import crud
+from backend.gateway import crud
 from backend.common.models.role_model import Role
 from backend.common.utils.exceptions.common_exception import (
     NameNotFoundException,

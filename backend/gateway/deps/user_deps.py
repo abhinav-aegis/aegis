@@ -1,7 +1,7 @@
-from backend.common import crud
+from backend.gateway import crud
 from backend.common.models.role_model import Role
 from backend.common.models.user_model import User
-from backend.common.schemas.user_schema import IUserCreate
+from backend.gateway.schema.user_schema import IUserCreate
 from backend.common.utils.exceptions.common_exception import IdNotFoundException
 from uuid import UUID
 from fastapi import HTTPException, Path, status

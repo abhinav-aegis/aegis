@@ -4,7 +4,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
 from httpx import ASGITransport, AsyncClient
 from backend.gateway.main import app
-from backend.common.db.init_db import init_db
+from backend.utils.init_db import init_db
 from backend.common.core.config import settings
 from sqlmodel import SQLModel
 import os

@@ -23,12 +23,12 @@ from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
 from starlette.middleware.cors import CORSMiddleware
 #from transformers import pipeline
 
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api.deps import get_redis_client
 from backend.gateway.api.v1.api import api_router as api_router_v1
 from backend.common.core.config import ModeEnum, settings
 from backend.common.core.security import decode_token
-from backend.common.schemas.common_schema import IChatResponse, IUserMessage
+from backend.gateway.schema.common_schema import IChatResponse, IUserMessage
 from backend.common.utils.fastapi_globals import GlobalsMiddleware, g
 from backend.common.utils.uuid6 import uuid7
 

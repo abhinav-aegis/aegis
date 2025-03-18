@@ -1,12 +1,12 @@
 from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi_pagination import Params
-from backend.common import crud
+from backend.gateway import crud
 from backend.gateway.api import deps
-from backend.common.deps import group_deps, user_deps
+from backend.gateway.deps import user_deps
 from backend.common.models.group_model import Group
 from backend.common.models.user_model import User
-from backend.common.schemas.group_schema import (
+from backend.gateway.schema.group_schema import (
     IGroupCreate,
     IGroupRead,
     IGroupReadWithUsers,
@@ -19,11 +19,12 @@ from backend.common.schemas.response_schema import (
     IPutResponseBase,
     create_response,
 )
-from backend.common.schemas.role_schema import IRoleEnum
+from backend.gateway.schema.role_schema import IRoleEnum
 from backend.common.utils.exceptions import (
     IdNotFoundException,
     NameExistException,
 )
+from backend.gateway.deps import group_deps
 
 router = APIRouter()
 

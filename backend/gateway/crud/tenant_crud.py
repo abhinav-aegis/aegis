@@ -1,4 +1,4 @@
-from backend.common.schemas.tenant_schema import ITenantCreate, ITenantUpdate
+from backend.gateway.schema.tenant_schema import ITenantCreate, ITenantUpdate
 from backend.common.models.tenant_model import Tenant
 from backend.common.crud.base_crud import CRUDBase
 from sqlmodel.ext.asyncio.session import AsyncSession

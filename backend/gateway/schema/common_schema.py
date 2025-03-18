@@ -2,7 +2,7 @@ from uuid import UUID
 from backend.common.utils.uuid6 import uuid7
 from pydantic import BaseModel, field_validator
 from enum import Enum
-from backend.common.schemas.role_schema import IRoleRead
+from backend.gateway.schema.role_schema import IRoleRead
 
 
 class IGenderEnum(str, Enum):
