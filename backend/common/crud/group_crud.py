@@ -7,7 +7,7 @@ from uuid import UUID
 from sqlmodel.ext.asyncio.session import AsyncSession
 from typing import Optional
 
-class CRUDGroup(CRUDBase[Group, IGroupCreate, IGroupUpdate]):
+class CRUDGroup(CRUDBase[Group, IGroupCreate, IGroupUpdate, Group]):
     async def get_group_by_name(
         self, *, name: str, db_session: AsyncSession | None = None
     ) -> Optional[Group]:

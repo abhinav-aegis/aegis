@@ -8,6 +8,7 @@ from backend.common.core.config import ModeEnum, settings  # Import your SQLAlch
 from sqlmodel import SQLModel  # Import SQLModel for metadata
 from backend.common.models import * # noqa
 from backend.gateway.models import * # noqa
+from backend.agents.models import * # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

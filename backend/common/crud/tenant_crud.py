@@ -5,7 +5,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
 from typing import Optional
 
-class CRUDTenant(CRUDBase[Tenant, ITenantCreate, ITenantUpdate]):
+class CRUDTenant(CRUDBase[Tenant, ITenantCreate, ITenantUpdate, Tenant]):
     async def get_tenant_by_name(
         self, *, name: str, db_session: AsyncSession | None = None
     ) -> Optional[Tenant]:

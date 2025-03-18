@@ -52,21 +52,21 @@ class Settings(BaseSettings):
                 )
         return v
 
-    ASYNC_TEST_DATABASE_URI: PostgresDsn | str = ""
+    ASYNC_TEST_DATABASE_URI: str = "sqlite+aiosqlite:///:memory:"
 
-    @field_validator("ASYNC_TEST_DATABASE_URI", mode="after")
-    def assemble_test_db_connection(cls, v: str | None, info: FieldValidationInfo) -> Any:
-        if isinstance(v, str):
-            if v == "":
-                return PostgresDsn.build(
-                    scheme="postgresql+asyncpg",
-                    username=info.data["DATABASE_USER"],
-                    password=info.data["DATABASE_PASSWORD"],
-                    host=info.data["DATABASE_HOST"],
-                    port=info.data["DATABASE_PORT"],
-                    path=info.data["DATABASE_NAME"]+"_test",
-                )
-        return v
+    # @field_validator("ASYNC_TEST_DATABASE_URI", mode="after")
+    # def assemble_test_db_connection(cls, v: str | None, info: FieldValidationInfo) -> Any:
+    #     if isinstance(v, str):
+    #         if v == "":
+    #             return PostgresDsn.build(
+    #                 scheme="postgresql+asyncpg",
+    #                 username=info.data["DATABASE_USER"],
+    #                 password=info.data["DATABASE_PASSWORD"],
+    #                 host=info.data["DATABASE_HOST"],
+    #                 port=info.data["DATABASE_PORT"],
+    #                 path=info.data["DATABASE_NAME"]+"_test",
+    #             )
+    #     return v
 
     SYNC_CELERY_DATABASE_URI: PostgresDsn | str = ""
 
@@ -124,6 +124,7 @@ class Settings(BaseSettings):
 
     FIRST_SUPERUSER_EMAIL: EmailStr
     FIRST_SUPERUSER_PASSWORD: str
+    M2M_CLIENT_SECRET: str
 
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: str

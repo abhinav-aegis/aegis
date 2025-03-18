@@ -8,7 +8,7 @@ from uuid import UUID
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 
-class CRUDUser(CRUDBase[User, IUserCreate, IUserUpdate]):
+class CRUDUser(CRUDBase[User, IUserCreate, IUserUpdate, User]):
     async def get_by_email(
         self, *, email: str, db_session: AsyncSession | None = None
     ) -> User | None:

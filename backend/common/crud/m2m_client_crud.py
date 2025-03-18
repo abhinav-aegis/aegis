@@ -6,7 +6,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 
-class CRUDM2MClient(CRUDBase[M2MClient, IM2MClientCreate, IM2MClientUpdate]):
+class CRUDM2MClient(CRUDBase[M2MClient, IM2MClientCreate, IM2MClientUpdate, M2MClient]):
     async def get_by_client_id(
         self, *, client_id: UUID, db_session: AsyncSession | None = None
     ) -> M2MClient | None:

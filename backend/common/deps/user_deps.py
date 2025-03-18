@@ -25,7 +25,6 @@ async def user_exists(new_user: IUserCreate) -> IUserCreate:
 
     return new_user
 
-
 async def is_valid_user(
     user_id: Annotated[UUID, Path(title="The UUID id of the user")]
 ) -> User:
@@ -34,7 +33,6 @@ async def is_valid_user(
         raise IdNotFoundException(User, id=user_id)
 
     return user
-
 
 async def is_valid_user_id(
     user_id: Annotated[UUID, Path(title="The UUID id of the user")]

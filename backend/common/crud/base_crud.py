@@ -16,10 +16,11 @@ ModelType = TypeVar("ModelType", bound=SQLModel)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 SchemaType = TypeVar("SchemaType", bound=BaseModel)
+ModelListReadType = TypeVar("ModelListReadType", bound=SQLModel)
 T = TypeVar("T", bound=SQLModel)
 
 
-class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
+class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType, ModelListReadType]):
     def __init__(self, model: type[ModelType]):
         """
         CRUD object with default methods to Create, Read, Update, Delete (CRUD).
@@ -70,7 +71,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         limit: int = 100,
         query: Select[ModelType] | None = None,
         db_session: AsyncSession | None = None,
-    ) -> Sequence[ModelType]:
+    ) -> Sequence[ModelListReadType]:
         db_session = db_session or self.db.session
         if query is None:
             query = select(self.model).offset(skip).limit(limit).order_by(self.model.id) # type: ignore
@@ -87,7 +88,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         params: Params | None = Params(),
         query: Select[ModelType] | None = None,
         db_session: AsyncSession | None = None,
-    ) -> Page[ModelType]:
+    ) -> Page[ModelListReadType]:
         db_session = db_session or self.db.session
         if query is None:
             query = select(self.model) # type: ignore
@@ -103,7 +104,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         order: IOrderEnum | None = IOrderEnum.ascendent,
         query: T | Select[T] | None = None,
         db_session: AsyncSession | None = None,
-    ) -> Page[ModelType]:
+    ) -> Page[ModelListReadType]:
         db_session = db_session or self.db.session
 
         columns = self.model.__table__.columns # type: ignore
@@ -127,7 +128,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         order_by: str | None = None,
         order: IOrderEnum | None = IOrderEnum.ascendent,
         db_session: AsyncSession | None = None,
-    ) -> list[ModelType]:
+    ) -> list[ModelListReadType]:
         db_session = db_session or self.db.session
 
         columns = self.model.__table__.columns # type: ignore
@@ -186,7 +187,6 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db_session: AsyncSession | None = None,
     ) -> ModelType:
         db_session = db_session or self.db.session
-
         if isinstance(obj_new, dict):
             update_data = obj_new
         else:

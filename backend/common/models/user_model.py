@@ -2,11 +2,12 @@ from backend.common.models.base_uuid_model import BaseUUIDModel
 from backend.common.models.links_model import LinkGroupUser
 from backend.common.schemas.common_schema import IGenderEnum
 from datetime import datetime
-from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String, ForeignKey
+from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String
 from typing import Optional
 from sqlalchemy_utils import ChoiceType # type: ignore
 from pydantic import EmailStr
 from uuid import UUID
+from .base_uuid_model import UUIDType
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -23,10 +24,9 @@ class UserBase(SQLModel):
     birthdate: datetime | None = Field(
         default=None, sa_column=Column(DateTime(timezone=True), nullable=True)
     )  # birthday with timezone
-    role_id: UUID | None = Field(default=None, foreign_key="Role.id")
-    tenant_id: UUID = Field(
-        sa_column=Column(ForeignKey("Tenant.id"), nullable=False, index=True)
-    )
+    role_id: UUID | None = Field(default=None, foreign_key="Role.id", sa_type=UUIDType())
+    tenant_id: UUID | None = Field(default=None, foreign_key="Tenant.id", sa_type=UUIDType(), nullable=False)
+
     phone: str | None = None
     gender: IGenderEnum | None = Field(
         default=IGenderEnum.other,

@@ -1,0 +1,4 @@
+- Move gateway optional dependencies
+- Create single env file for infrasture and code
+- Dockerfile for each microservice (dev and prod)
+- Optimise multi-paginated query response so that all foreign key objects are not loaded from the DB.

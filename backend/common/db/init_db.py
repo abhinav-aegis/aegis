@@ -3,6 +3,7 @@ from backend.common import crud
 from backend.common.schemas.user_schema import IUserCreate
 from backend.common.schemas.role_schema import IRoleCreate
 from backend.common.schemas.tenant_schema import ITenantCreate
+from backend.common.schemas.m2m_client_schema import IM2MClientCreate
 from backend.common.core.config import settings
 from typing import List, Dict
 
@@ -27,6 +28,14 @@ raw_users = [
     {"first_name": "User", "last_name": "FastAPI", "email": "user@example.com", "role": "user", "tenant": "tenant1", "is_superuser": False},
 ]
 
+m2m_clients: List[IM2MClientCreate] = [
+    IM2MClientCreate(
+        client_id="3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        client_name="test_client",
+        service_description="Test client service",
+        secret=settings.M2M_CLIENT_SECRET
+    )
+]
 
 async def init_db(db_session: AsyncSession) -> None:
     """
@@ -78,3 +87,10 @@ async def init_db(db_session: AsyncSession) -> None:
                 role_id=role_id,
             )
             await crud.user.create_with_role(obj_in=user_create, db_session=db_session)
+
+    for m2m_client in m2m_clients:
+        existing_client = await crud.m2m_client.get_by_client_id(
+            client_id=m2m_client.client_id, db_session=db_session
+        )
+        if not existing_client:
+            await crud.m2m_client.create_with_hashed_secret(obj_in=m2m_client, db_session=db_session)

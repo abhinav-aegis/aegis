@@ -1,0 +1,6 @@
+model_list:
+  - model_name: gpt-4o-mini
+    litellm_params:
+      model: gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY # runs os.getenv("AZURE_API_KEY")
+      api_version: "2023-07-01-preview"

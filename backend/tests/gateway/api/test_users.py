@@ -53,8 +53,9 @@ async def test_get_user_by_id(authenticated_client: AsyncClient, session):
     user_data = response.json()["data"]
     assert user_data["id"] == str(admin_user.id)
 
+@pytest.mark.db_write
 @pytest.mark.parametrize("authenticated_client", ["admin"], indirect=True)
-async def test_create_user(authenticated_client: AsyncClient, session):
+async def test_create_user_1(authenticated_client: AsyncClient, session):
     """
     Retrieve role_id and tenant_id dynamically instead of assuming settings values.
     """
@@ -77,7 +78,11 @@ async def test_create_user(authenticated_client: AsyncClient, session):
         "is_superuser": False
     }
 
+    print("startig to await")
+
     response = await authenticated_client.post("/user", json=new_user_data)
+
+    print("done awaiting")
     assert response.status_code == 201
     created_user = response.json()["data"]
     assert created_user["email"] == new_user_data["email"]
@@ -87,6 +92,7 @@ async def test_create_user_forbidden(authenticated_client: AsyncClient):
     response = await authenticated_client.post("/user", json={})
     assert response.status_code == 403  # Only admins can create users
 
+@pytest.mark.db_write
 @pytest.mark.parametrize("authenticated_client", ["admin"], indirect=True)
 async def test_delete_user(authenticated_client: AsyncClient, session):
     """

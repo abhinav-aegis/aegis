@@ -7,7 +7,8 @@ from sqlmodel import select
 from uuid import UUID
 from typing import Optional
 
-class CRUDRole(CRUDBase[Role, IRoleCreate, IRoleUpdate]):
+
+class CRUDRole(CRUDBase[Role, IRoleCreate, IRoleUpdate, Role]):
     async def get_role_by_name(
         self, *, name: str, db_session: AsyncSession | None = None
     ) -> Optional[Role]:
@@ -23,6 +24,5 @@ class CRUDRole(CRUDBase[Role, IRoleCreate, IRoleUpdate]):
         await db_session.commit()
         await db_session.refresh(role)
         return role
-
 
 role = CRUDRole(Role)
