@@ -17,7 +17,7 @@ repos:
     hooks:
       - id: ruff
         name: ruff
-        exclude: ^(backend/migrations/|backend/.*/tests/)
+        exclude: ^(backend/migrations/)
         args: ["--fix"]
 
   # mypy - type checking (updated for FastAPI)
@@ -46,7 +46,7 @@ repos:
           - sqlalchemy_utils
           - celery_sqlalchemy_scheduler
           - bcrypt
-        exclude: ^(backend/migrations/|backend/.*/tests/)
+        exclude: ^(backend/migrations/)
         args:
           - --explicit-package-bases
           - --disable-error-code=import-not-found
@@ -78,11 +78,10 @@ repos:
     hooks:
       - id: bandit
         name: bandit
-        exclude: ^(backend/migrations/|backend/.*/tests/)
         args:
           - -r
           - --exclude
-          - backend/migrations,backend/tests
+          - backend/migrations,backend/gateway/tests,backend/agents/tests,backend/data/tests,backend/proxy/tests
           - backend
 
   # prettier - for JS, CSS, JSON, Markdown

@@ -3,7 +3,7 @@ from uuid import UUID
 from redis.asyncio import Redis
 from backend.gateway.models.user_model import User
 from backend.common.models.m2m_client_model import M2MClient
-from backend.gateway.schema.common_schema import TokenType, TokenSubjectType
+from backend.common.schemas.common_schema import TokenType, TokenSubjectType
 
 
 async def add_token_to_redis(

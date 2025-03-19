@@ -13,9 +13,11 @@ from backend.common.core.config import settings
 from backend.common.core.security import decode_token
 from backend.common.db.session import SessionLocalCelery
 from backend.gateway.models.user_model import User
-from backend.gateway.schema.common_schema import IMetaGeneral, TokenType, IRoleRead
+from backend.gateway.schema.common_schema import IMetaGeneral
+from backend.common.schemas.common_schema import TokenType
+from backend.gateway.schema.role_schema import IRoleRead
 from backend.common.utils.minio_client import MinioClient
-from backend.common.utils.token import get_valid_tokens
+from backend.gateway.utils.token import get_valid_tokens
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"

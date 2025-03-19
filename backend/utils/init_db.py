@@ -1,5 +1,6 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 from backend.gateway import crud
+from backend.common import crud as common_crud
 from backend.gateway.schema.user_schema import IUserCreate
 from backend.gateway.schema.role_schema import IRoleCreate
 from backend.gateway.schema.tenant_schema import ITenantCreate
@@ -89,8 +90,8 @@ async def init_db(db_session: AsyncSession) -> None:
             await crud.user.create_with_role(obj_in=user_create, db_session=db_session)
 
     for m2m_client in m2m_clients:
-        existing_client = await crud.m2m_client.get_by_client_id(
+        existing_client = await common_crud.m2m_client.get_by_client_id(
             client_id=m2m_client.client_id, db_session=db_session
         )
         if not existing_client:
-            await crud.m2m_client.create_with_hashed_secret(obj_in=m2m_client, db_session=db_session)
+            await common_crud.m2m_client.create_with_hashed_secret(obj_in=m2m_client, db_session=db_session)

@@ -15,19 +15,6 @@ class IMetaGeneral(BaseModel):
     roles: list[IRoleRead]
 
 
-class IOrderEnum(str, Enum):
-    ascendent = "ascendent"
-    descendent = "descendent"
-
-
-class TokenType(str, Enum):
-    ACCESS = "access_token"
-    REFRESH = "refresh_token"
-
-class TokenSubjectType(str, Enum):
-    USER = "user"
-    CLIENT = "client"
-
 class IUserMessage(BaseModel):
     """
     User message schema.

@@ -8,14 +8,14 @@ from jwt import DecodeError, ExpiredSignatureError, MissingRequiredClaimError
 from redis.asyncio import Redis
 from fastapi.security import HTTPBasic
 
-from backend.gateway import crud
+from backend.common import crud
 from backend.common.deps.service_deps import get_redis_client
 from backend.common.core import security
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token
-from backend.gateway.schema.common_schema import TokenType, TokenSubjectType
+from backend.common.schemas.common_schema import TokenType, TokenSubjectType
 from backend.common.schemas.response_schema import IPostResponseBase, create_response
-from backend.common.utils.token import add_token_to_redis, get_valid_tokens
+from backend.gateway.utils.token import add_token_to_redis, get_valid_tokens
 from uuid import UUID
 from pydantic import BaseModel
 
