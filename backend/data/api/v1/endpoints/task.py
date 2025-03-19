@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends
 from fastapi_pagination import Params
 from backend.common.deps import service_deps
-from backend.common.models.user_model import User
+from backend.gateway.models.user_model import User
 
 router = APIRouter()
 

@@ -3,8 +3,8 @@ from backend.common.models.base_uuid_model import BaseUUIDModel
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.common.models.user_model import User
-    from backend.common.models.group_model import Group
+    from backend.gateway.models.user_model import User
+    from backend.gateway.models.group_model import Group
 
 class TenantBase(SQLModel):
     """

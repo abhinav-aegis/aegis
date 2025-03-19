@@ -6,8 +6,8 @@ from backend.common.utils.exceptions import (
 from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.gateway.deps import user_deps
-from backend.common.models import User
-from backend.common.models.role_model import Role
+from backend.gateway.models import User
+from backend.gateway.models.role_model import Role
 from fastapi import (
     APIRouter,
     Depends,

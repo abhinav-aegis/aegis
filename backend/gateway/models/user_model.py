@@ -1,5 +1,5 @@
 from backend.common.models.base_uuid_model import BaseUUIDModel
-from backend.common.models.links_model import LinkGroupUser
+from backend.gateway.models.links_model import LinkGroupUser
 from backend.gateway.schema.common_schema import IGenderEnum
 from datetime import datetime
 from sqlmodel import Field, SQLModel, Relationship, Column, DateTime, String
@@ -7,13 +7,13 @@ from typing import Optional
 from sqlalchemy_utils import ChoiceType # type: ignore
 from pydantic import EmailStr
 from uuid import UUID
-from .base_uuid_model import UUIDType
+from ...common.models.base_uuid_model import UUIDType
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.common.models.group_model import Group
-    from backend.common.models.role_model import Role
-    from backend.common.models.tenant_model import Tenant
+    from backend.gateway.models.group_model import Group
+    from backend.gateway.models.role_model import Role
+    from backend.gateway.models.tenant_model import Tenant
 
 class UserBase(SQLModel):
     first_name: str

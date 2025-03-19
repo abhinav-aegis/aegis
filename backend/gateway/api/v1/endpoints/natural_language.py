@@ -1,10 +1,10 @@
 from backend.gateway.api import deps
 from backend.gateway.api.celery_task import predict_transformers_pipeline
-from backend.common.models.user_model import User
+from backend.gateway.models.user_model import User
 from fastapi import APIRouter, Depends, HTTPException
 from backend.common.utils.fastapi_globals import g
 from backend.common.schemas.response_schema import IPostResponseBase, create_response
-from backend.common.core.celery import celery
+from backend.gateway.core.celery import celery
 from fastapi_limiter.depends import RateLimiter
 
 router = APIRouter()

@@ -1,5 +1,5 @@
 from backend.gateway.schema.user_schema import IUserCreate, IUserUpdate
-from backend.common.models.user_model import User
+from backend.gateway.models.user_model import User
 from backend.common.core.security import verify_password, get_password_hash
 from pydantic.networks import EmailStr
 from backend.common.crud.base_crud import CRUDBase

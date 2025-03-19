@@ -12,7 +12,7 @@ from backend.gateway.api.deps import get_redis_client
 from backend.common.core import security
 from backend.common.core.config import settings
 from backend.common.core.security import decode_token, get_password_hash, verify_password
-from backend.common.models.user_model import User
+from backend.gateway.models.user_model import User
 from backend.gateway.schema.user_schema import IUserRead
 from backend.gateway.schema.common_schema import IMetaGeneral, TokenType
 from backend.common.schemas.response_schema import IPostResponseBase, create_response

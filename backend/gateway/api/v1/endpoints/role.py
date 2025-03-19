@@ -7,8 +7,8 @@ from fastapi_pagination import Params
 from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.gateway.deps import role_deps
-from backend.common.models.role_model import Role
-from backend.common.models.user_model import User
+from backend.gateway.models.role_model import Role
+from backend.gateway.models.user_model import User
 from backend.common.schemas.response_schema import (
     IGetResponseBase,
     IGetResponsePaginated,

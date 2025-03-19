@@ -1,9 +1,9 @@
 """
 Initial Migrations.
 
-Revision ID: 44aae1506c05
+Revision ID: 6ad93886d940
 Revises:
-Create Date: 2025-03-17 19:32:24.811734
+Create Date: 2025-03-19 00:28:08.812146
 """
 from typing import Sequence, Union
 
@@ -11,10 +11,10 @@ from alembic import op
 import sqlalchemy as sa
 import sqlmodel.sql.sqltypes
 import sqlalchemy_utils
-from backend.common.models.user_model import IGenderEnum
+from backend.gateway.models.user_model import IGenderEnum
 
 # revision identifiers, used by Alembic.
-revision: str = '44aae1506c05'
+revision: str = '6ad93886d940'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None

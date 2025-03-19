@@ -1,6 +1,6 @@
 from backend.gateway.schema.role_schema import IRoleCreate, IRoleUpdate
-from backend.common.models.role_model import Role
-from backend.common.models.user_model import User
+from backend.gateway.models.role_model import Role
+from backend.gateway.models.user_model import User
 from backend.common.crud.base_crud import CRUDBase
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select

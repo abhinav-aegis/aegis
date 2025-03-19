@@ -1,5 +1,5 @@
 from backend.gateway import crud
-from backend.common.models.role_model import Role
+from backend.gateway.models.role_model import Role
 from backend.common.utils.exceptions.common_exception import (
     NameNotFoundException,
     IdNotFoundException,

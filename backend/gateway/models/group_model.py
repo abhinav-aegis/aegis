@@ -6,8 +6,8 @@ from typing import Optional
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.common.models.user_model import User
-    from backend.common.models.tenant_model import Tenant
+    from backend.gateway.models.user_model import User
+    from backend.gateway.models.tenant_model import Tenant
 
 class GroupBase(SQLModel):
     name: str

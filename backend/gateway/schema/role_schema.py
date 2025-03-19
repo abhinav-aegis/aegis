@@ -1,5 +1,5 @@
 from enum import Enum
-from backend.common.models.role_model import RoleBase
+from backend.gateway.models.role_model import RoleBase
 from backend.common.utils.partial import optional
 from uuid import UUID
 

@@ -6,7 +6,7 @@ from fastapi_pagination import Params
 from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.common.models.m2m_client_model import M2MClient
-from backend.common.models.user_model import User
+from backend.gateway.models.user_model import User
 from backend.common.schemas.response_schema import (
     IGetResponseBase,
     IGetResponsePaginated,

@@ -1,4 +1,4 @@
-from backend.common.models.group_model import GroupBase
+from backend.gateway.models.group_model import GroupBase
 from backend.common.utils.partial import optional
 from uuid import UUID
 from .user_schema import IUserReadWithoutGroups

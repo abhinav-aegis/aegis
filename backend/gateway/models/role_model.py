@@ -2,7 +2,7 @@ from sqlmodel import SQLModel, Relationship
 from backend.common.models.base_uuid_model import BaseUUIDModel
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from backend.common.models.user_model import User
+    from backend.gateway.models.user_model import User
 
 class RoleBase(SQLModel):
     name: str

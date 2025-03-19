@@ -8,8 +8,8 @@ from fastapi_pagination import Params
 from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.gateway.deps import tenant_deps
-from backend.common.models.tenant_model import Tenant
-from backend.common.models.user_model import User
+from backend.gateway.models.tenant_model import Tenant
+from backend.gateway.models.user_model import User
 from backend.common.schemas.response_schema import (
     IGetResponseBase,
     IGetResponsePaginated,

@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from alembic import context
 from backend.common.core.config import ModeEnum, settings  # Import your SQLAlchemy engine
 from sqlmodel import SQLModel  # Import SQLModel for metadata
-from backend.common.models import * # noqa
+from backend.gateway.models import * # noqa
 from backend.gateway.models import * # noqa
 from backend.agents.models import * # noqa
 

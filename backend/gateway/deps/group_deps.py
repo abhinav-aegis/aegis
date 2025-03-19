@@ -1,5 +1,5 @@
 from backend.gateway import crud
-from backend.common.models.group_model import Group
+from backend.gateway.models.group_model import Group
 from backend.common.utils.exceptions.common_exception import (
     NameNotFoundException,
     IdNotFoundException,

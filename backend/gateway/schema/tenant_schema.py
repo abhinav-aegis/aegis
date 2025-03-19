@@ -1,4 +1,4 @@
-from backend.common.models.tenant_model import TenantBase
+from backend.gateway.models.tenant_model import TenantBase
 from backend.common.utils.partial import optional
 from uuid import UUID
 

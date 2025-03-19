@@ -4,8 +4,8 @@ from fastapi_pagination import Params
 from backend.gateway import crud
 from backend.gateway.api import deps
 from backend.gateway.deps import user_deps
-from backend.common.models.group_model import Group
-from backend.common.models.user_model import User
+from backend.gateway.models.group_model import Group
+from backend.gateway.models.user_model import User
 from backend.gateway.schema.group_schema import (
     IGroupCreate,
     IGroupRead,
