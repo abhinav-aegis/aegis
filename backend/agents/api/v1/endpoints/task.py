@@ -23,7 +23,7 @@ router = APIRouter()
 @router.get("")
 async def get_tasks(
     params: Params = Depends(),
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponsePaginated[ITaskRead]:
     tasks = await crud.task.get_multi_paginated(params=params)
     return create_response(data=tasks) # type: ignore
@@ -32,7 +32,7 @@ async def get_tasks(
 @router.get("/{task_id}")
 async def get_task_by_id(
     task_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[ITaskRead]:
     task = await crud.task.get(id=task_id)
     if not task:
@@ -42,7 +42,7 @@ async def get_task_by_id(
 @router.post("")
 async def create_task(
     task_in: ITaskCreate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPostResponseBase[ITaskRead]:
     task = await crud.task.get_task_by_name(name=task_in.name)
     if task:
@@ -54,7 +54,7 @@ async def create_task(
 async def update_task(
     task_id: UUID,
     task_in: ITaskUpdate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[ITaskRead]:
     task = await crud.task.get(id=task_id)
     if not task:
@@ -65,7 +65,7 @@ async def update_task(
 @router.delete("/{task_id}")
 async def delete_task(
     task_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[ITaskRead]:
     task = await crud.task.get(id=task_id)
     if not task:

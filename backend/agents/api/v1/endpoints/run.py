@@ -28,7 +28,7 @@ async def get_runs(
     created_after: datetime | None = None,
     created_before: datetime | None = None,
     archived: bool | None = None,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponsePaginated[IRunList]:
     runs = await crud.run.get_filtered_runs(
         session_id=session_id,
@@ -43,7 +43,7 @@ async def get_runs(
 @router.get("/{run_id}")
 async def get_run_by_id(
     run_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[IRunRead]:
     run = await crud.run.get(id=run_id)
     if not run:
@@ -53,7 +53,7 @@ async def get_run_by_id(
 @router.post("")
 async def create_run(
     run_in: IRunCreate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPostResponseBase[IRunRead]:
     run = await crud.run.create(obj_in=run_in)
     return create_response(data=run, message="Run created.") # type: ignore
@@ -62,7 +62,7 @@ async def create_run(
 async def update_run(
     run_id: UUID,
     run_in: IRunUpdate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[IRunRead]:
     run = await crud.run.get(id=run_id)
     if not run:
@@ -73,7 +73,7 @@ async def update_run(
 @router.put("/{run_id}/archive")
 async def archive_run(
     run_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[IRunRead]:
     """
     Archives a run by setting `archived=True`.

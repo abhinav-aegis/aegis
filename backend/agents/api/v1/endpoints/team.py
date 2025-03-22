@@ -22,7 +22,7 @@ router = APIRouter()
 @router.get("")
 async def get_teams(
     params: Params = Depends(),
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponsePaginated[ITeamRead]:
     teams = await crud.team.get_multi_paginated(params=params)
     return create_response(data=teams) # type: ignore
@@ -30,7 +30,7 @@ async def get_teams(
 @router.get("/{team_id}")
 async def get_team_by_id(
     team_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[ITeamRead]:
     team = await crud.team.get(id=team_id)
     if not team:
@@ -40,7 +40,7 @@ async def get_team_by_id(
 @router.post("")
 async def create_team(
     team_in: ITeamCreate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPostResponseBase[ITeamRead]:
     team = await crud.team.create(obj_in=team_in)
     return create_response(data=team, message="Team created.") # type: ignore
@@ -49,7 +49,7 @@ async def create_team(
 async def update_team(
     team_id: UUID,
     team_in: ITeamUpdate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[ITeamRead]:
     team = await crud.team.get(id=team_id)
     if not team:
@@ -60,7 +60,7 @@ async def update_team(
 @router.delete("/{team_id}")
 async def delete_team(
     team_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[ITeamRead]:
     team = await crud.team.get(id=team_id)
     if not team:

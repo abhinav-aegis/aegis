@@ -9,8 +9,7 @@ from autogen_core import ComponentModel
 from pydantic import ConfigDict
 
 from sqlalchemy import UUID as SQLAlchemyUUID
-from sqlalchemy import ForeignKey
-from sqlmodel import JSON, Column, Field, SQLModel, Relationship, DateTime, Boolean
+from sqlmodel import JSON, Column, Field, SQLModel, Relationship, DateTime, Boolean, ForeignKey
 from datetime import timezone
 from backend.common.models.base_uuid_model import BaseUUIDModel
 

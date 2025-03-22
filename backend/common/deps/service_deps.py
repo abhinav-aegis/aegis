@@ -3,7 +3,7 @@ from typing import Callable, Optional, Awaitable, List
 from fastapi.openapi.models import OAuthFlows as OAuthFlowsModel, OAuthFlowClientCredentials
 
 import redis.asyncio as aioredis
-from fastapi import Depends, HTTPException, status, Header
+from fastapi import Depends, HTTPException, status, Header, Security
 from fastapi.security import OAuth2
 from fastapi.security.utils import get_authorization_scheme_param
 from starlette.requests import Request
@@ -14,11 +14,12 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 
 from backend.common import crud
 from backend.common.core.config import settings
-from backend.common.core.security import decode_token
+from backend.common.core.security import decode_token, http_bearer_scheme
 from backend.common.db.session import SessionLocalCelery
-from backend.common.models.m2m_client_model import M2MClient
+from backend.common.models.m2m_client_model import M2MClient, APIKey
 from backend.common.schemas.common_schema import TokenType, TokenSubjectType
 from backend.gateway.utils.token import get_valid_tokens
+
 
 class Oauth2ClientCredentials(OAuth2):
     def __init__(
@@ -110,6 +111,27 @@ def get_current_client(required_roles: Optional[list[str]] = None) -> Callable[[
         return client
 
     return current_client
+
+async def get_current_api_key(
+    credentials = Security(http_bearer_scheme),
+) -> APIKey:
+    if not credentials or not credentials.credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or missing Authorization header",
+        )
+
+    raw_key = credentials.credentials.strip()
+    api_key_obj = await crud.api_key.get_by_raw_key(raw_key=raw_key)
+
+    if not api_key_obj:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid or inactive API key",
+        )
+
+    return api_key_obj
+
 
 async def get_request_context(
     x_user_id: Optional[str] = Header(None, alias="X-User-ID"),

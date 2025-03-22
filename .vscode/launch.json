@@ -19,6 +19,14 @@
       "module": "uvicorn",
       "args": ["backend.agents.main:app", "--reload", "--port", "8001"],
       "jinja": true
+    },
+    {
+      "name": "Python Debugger: Proxy",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["backend.proxy.main:app", "--reload", "--port", "8002"],
+      "jinja": true
     }
   ]
 }

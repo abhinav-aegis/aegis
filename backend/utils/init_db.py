@@ -4,7 +4,7 @@ from backend.common import crud as common_crud
 from backend.gateway.schema.user_schema import IUserCreate
 from backend.gateway.schema.role_schema import IRoleCreate
 from backend.gateway.schema.tenant_schema import ITenantCreate
-from backend.common.schemas.m2m_client_schema import IM2MClientCreate
+from backend.common.schemas.m2m_client_schema import IM2MClientCreate, IAPIKeyCreate
 from backend.common.core.config import settings
 from typing import List, Dict
 
@@ -35,6 +35,17 @@ m2m_clients: List[IM2MClientCreate] = [
         client_name="test_client",
         service_description="Test client service",
         secret=settings.M2M_CLIENT_SECRET
+    )
+]
+
+api_keys: List[IAPIKeyCreate] = [
+    IAPIKeyCreate(
+        key_id="3fa85f64-5717-4562-b3fc-2c963f66afa7",
+        name="test_key",
+        preview="svc_test",
+        service_description="Test service",
+        created_by="test_integration",
+        raw_key=settings.M2M_CLIENT_SECRET
     )
 ]
 
@@ -89,9 +100,16 @@ async def init_db(db_session: AsyncSession) -> None:
             )
             await crud.user.create_with_role(obj_in=user_create, db_session=db_session)
 
-    for m2m_client in m2m_clients:
-        existing_client = await common_crud.m2m_client.get_by_client_id(
-            client_id=m2m_client.client_id, db_session=db_session
+    # for m2m_client in m2m_clients:
+    #     existing_client = await common_crud.m2m_client.get_by_client_id(
+    #         client_id=m2m_client.client_id, db_session=db_session
+    #     )
+    #     if not existing_client:
+    #         await common_crud.m2m_client.create_with_hashed_secret(obj_in=m2m_client, db_session=db_session)
+
+    for api_key in api_keys:
+        existing_key = await common_crud.api_key.get_by_raw_key(
+            raw_key=api_key.raw_key, db_session=db_session
         )
-        if not existing_client:
-            await common_crud.m2m_client.create_with_hashed_secret(obj_in=m2m_client, db_session=db_session)
+        if not existing_key:
+            await common_crud.api_key.create_with_hashed_key(obj_in=api_key, db_session=db_session)

@@ -28,7 +28,8 @@ async def get_sessions(
     created_after: datetime | None = None,
     created_before: datetime | None = None,
     archived: bool | None = None,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
+    context: dict = Depends(service_deps.get_request_context),
 ) -> IGetResponsePaginated[ISessionRead]:
     sessions = await crud.session.get_filtered_sessions(
         task_id=task_id,
@@ -43,7 +44,7 @@ async def get_sessions(
 @router.get("/{session_id}")
 async def get_session_by_id(
     session_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[ISessionRead]:
     session = await crud.session.get(id=session_id)
     if not session:
@@ -53,8 +54,10 @@ async def get_session_by_id(
 @router.post("")
 async def create_session(
     session_in: ISessionCreate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
+    # context: dict = Depends(service_deps.get_context()),
 ) -> IPostResponseBase[ISessionRead]:
+    #print("context", context)
     session = await crud.session.create(obj_in=session_in)
     return create_response(data=session, message="Session created.") # type: ignore
 
@@ -62,7 +65,7 @@ async def create_session(
 async def update_session(
     session_id: UUID,
     session_in: ISessionUpdate,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[ISessionRead]:
     session = await crud.session.get(id=session_id)
     if not session:
@@ -73,7 +76,7 @@ async def update_session(
 @router.put("/{session_id}/archive")
 async def archive_session(
     session_id: UUID,
-    current_client: M2MClient = Depends(service_deps.get_current_client()),
+    current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IPutResponseBase[ISessionRead]:
     """
     Archives a session by setting `archived=True`.
