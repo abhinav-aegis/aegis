@@ -16,6 +16,7 @@ from backend.agents.schemas import (
     IMessageCreate, IMessageUpdate,
     IRegistryCreate, IRegistryUpdate
 )
+from backend.agents.types import MessageConfig
 from backend.common.schemas.common_schema import IOrderEnum
 
 class CRUDTask(CRUDBase[Task, ITaskCreate, ITaskUpdate, Task]):
@@ -203,6 +204,57 @@ class CRUDRun(CRUDBase[Run, IRunCreate, IRunUpdate, IRunList]):
         return await self.get_multi_paginated_ordered(
             params=params, order_by="created_at", order=IOrderEnum.descendent, query=query, db_session=db_session # type: ignore
         )
+
+    async def create(
+        self,
+        *,
+        obj_in: IRunCreate | Run,
+        created_by_id: UUID | str | None = None,
+        db_session: AsyncSession | None = None,
+    ) -> Run:
+        db_session = db_session or super().get_db_session()
+        db_obj = Run.model_validate(obj_in)  # type: ignore
+
+        if isinstance(db_obj.run_task, MessageConfig):
+            db_obj.run_task = db_obj.run_task.model_dump()
+
+        try:
+            db_session.add(db_obj)
+            await db_session.commit()
+        except exc.IntegrityError:
+            await db_session.rollback()
+            raise HTTPException(
+                status_code=409,
+                detail="Resource already exists",
+            )
+        await db_session.refresh(db_obj)
+        return db_obj
+
+    async def update(
+        self,
+        *,
+        obj_current: Run,
+        obj_new: IRunUpdate | dict[str, Any] | Run,
+        db_session: AsyncSession | None = None,
+    ) -> Run:
+        db_session = db_session or super().get_db_session()
+
+        if isinstance(obj_new, dict):
+            update_data = obj_new
+        else:
+            update_data = obj_new.dict(
+                exclude_unset=True
+            )
+        if "run_task" in update_data and isinstance(update_data["run_task"], MessageConfig):
+            update_data["run_task"] = update_data["run_task"].model_dump()
+
+        for field in update_data:
+            setattr(obj_current, field, update_data[field])
+
+        db_session.add(obj_current)
+        await db_session.commit()
+        await db_session.refresh(obj_current)
+        return obj_current
 
     async def get_by_task_id(
         self,

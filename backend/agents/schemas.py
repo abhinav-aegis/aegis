@@ -7,8 +7,13 @@ from backend.agents.models import (
     TaskBase,
     SessionBase,
     RunBase,
-    RegistryBase
+    RegistryBase,
+    RunStatus
 )
+from pydantic import types as pydantic_types
+from datetime import datetime
+from .types import TeamResult
+from typing import Union
 
 # --- Team Schemas ---
 class ITeamCreate(TeamBase):
@@ -38,9 +43,14 @@ class IMessageCreate(MessageBase):
 
 class IMessageRead(MessageBase):
     id: UUID
+    status: RunStatus
+    team_result: Union[TeamResult, dict]
+    error_message: Optional[str]
+    created_at: pydantic_types.AwareDatetime | None
+    estimated_completion_time: Optional[datetime]
 
 @optional()
-class IMessageUpdate(MessageBase):
+class IMessageUpdate(IMessageRead):
     pass
 
 # --- Session Schemas ---
@@ -65,10 +75,15 @@ class IRunCreate(RunBase):
 
 class IRunRead(RunBase):
     id: UUID
-    messages: Optional[List[IMessageRead]] = []
+    status: RunStatus
+    team_result: Optional[Union[TeamResult, dict]]
+    error_message: Optional[str]
+    created_at: Optional[datetime]
+    estimated_completion_time: Optional[datetime]
 
 class IRunList(RunBase):
     id: UUID
+
 
 @optional()
 class IRunUpdate(RunBase):  # Internal update schema

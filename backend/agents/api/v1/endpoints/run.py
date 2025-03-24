@@ -16,7 +16,7 @@ from backend.common.deps import service_deps
 from backend.common.models.m2m_client_model import M2MClient
 from backend.agents.schemas import IRunCreate, IRunRead, IRunUpdate, IRunList
 from backend.agents import crud
-from backend.agents.models import Run
+from backend.agents.models import Run, RunStatus
 
 router = APIRouter()
 
@@ -40,14 +40,36 @@ async def get_runs(
     )
     return create_response(data=runs) # type: ignore
 
+temporary_team_result = {
+    "task_result": {
+      "messages": [
+        {
+          "source": "automarking_agent",
+          "content": {
+            "reasoning": "The student correctly identified Canberra, Sydney and Melbourne.",
+            "satisfactory": True,
+            "relevance_score": 10,
+            "completeness_score": 10,
+            "confidence_score": 0.9
+          },
+          "type": "dict"
+        }
+      ],
+      "stop_reason": None
+    }
+}
+
 @router.get("/{run_id}")
 async def get_run_by_id(
     run_id: UUID,
     current_client: M2MClient = Depends(service_deps.get_current_api_key),
 ) -> IGetResponseBase[IRunRead]:
     run = await crud.run.get(id=run_id)
+
     if not run:
         raise IdNotFoundException(Run, run_id)
+    run.team_result = temporary_team_result
+    run.status = RunStatus.COMPLETE
     return create_response(data=run) # type: ignore
 
 @router.post("")

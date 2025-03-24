@@ -135,21 +135,27 @@ class RunBase(SQLModel):
     task_id: UUID = Field(
         sa_column=Column(ForeignKey("Task.id", ondelete="CASCADE"), index=True)
     )
-    status: RunStatus = Field(default=RunStatus.CREATED)
+
 
     # Note: This is the specifc task that is being run - this is different from the task_id in the session whcih
     # represents the task template
     run_task: Union[MessageConfig, dict] = Field(
         default_factory=lambda: MessageConfig(source="", content=""), sa_column=Column(JSON)
     )
-    team_result: Union[TeamResult, dict] = Field(default=None, sa_column=Column(JSON))
-    error_message: Optional[str] = None
+
     batch_mode: Optional[bool] = False
 
     created_by_user_id: Optional[UUID] = Field(
         default=None,
         sa_column=Column(SQLAlchemyUUID, nullable=True)  # Nullable for M2M executions
     )
+
+    archived: Optional[bool] = Field(default=False)
+
+class Run(RunBase, BaseUUIDModel, table=True):
+    status: RunStatus = Field(default=RunStatus.CREATED)
+    team_result: Optional[Union[TeamResult, dict]] = Field(default=None, sa_column=Column(JSON, nullable=True))
+    error_message: Optional[str] = None
     created_at: pydantic_types.AwareDatetime | None = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True), nullable=False, index=True),
@@ -158,9 +164,7 @@ class RunBase(SQLModel):
         default=None,
         sa_column=Column(DateTime(timezone=True), nullable=True),
     )
-    archived: Optional[bool] = Field(default=False)
 
-class Run(RunBase, BaseUUIDModel, table=True):
     task: Optional["Task"] = Relationship(
         sa_relationship_kwargs={"lazy": "joined"}
     )

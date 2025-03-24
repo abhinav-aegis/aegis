@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict
 
 class MessageConfig(BaseModel):
     source: str
-    content: str
+    content: str | dict
     message_type: Optional[str] = "text"
 
 
