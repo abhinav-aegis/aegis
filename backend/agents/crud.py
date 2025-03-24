@@ -7,7 +7,7 @@ from sqlalchemy import exc
 from fastapi import HTTPException
 from fastapi_pagination import Params, Page
 from datetime import datetime
-from backend.common.crud.base_crud import CRUDBase
+from backend.common.crud.base_crud import CRUDBase, handle_integrity_error
 from backend.agents.models import Team, Message, Task, Session, Run, Registry
 from backend.agents.schemas import (
     ITeamCreate, ITeamUpdate, ITaskCreate, ITaskUpdate,
@@ -221,12 +221,11 @@ class CRUDRun(CRUDBase[Run, IRunCreate, IRunUpdate, IRunList]):
         try:
             db_session.add(db_obj)
             await db_session.commit()
-        except exc.IntegrityError:
+        except exc.IntegrityError as e:
             await db_session.rollback()
-            raise HTTPException(
-                status_code=409,
-                detail="Resource already exists",
-            )
+            handle_integrity_error(e)
+
+
         await db_session.refresh(db_obj)
         return db_obj
 

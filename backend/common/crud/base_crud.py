@@ -19,6 +19,29 @@ SchemaType = TypeVar("SchemaType", bound=BaseModel)
 ModelListReadType = TypeVar("ModelListReadType", bound=SQLModel)
 T = TypeVar("T", bound=SQLModel)
 
+def handle_integrity_error(e: exc.IntegrityError) -> None:
+    error_message = str(e.orig) if e.orig else str(e)
+    if "duplicate key" in error_message:
+        raise HTTPException(
+            status_code=409,
+            detail="Resource already exists (duplicate key constraint violation)."
+        )
+    elif "foreign key constraint" in error_message:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid foreign key reference (missing related record)."
+        )
+    elif "null value in column" in error_message:
+        raise HTTPException(
+            status_code=400,
+            detail="Missing required field (null value constraint violation)."
+        )
+    else:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Database integrity error: {error_message}"
+        )
+
 
 class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType, ModelListReadType]):
     def __init__(self, model: type[ModelType]):
@@ -170,12 +193,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType, ModelListR
         try:
             db_session.add(db_obj)
             await db_session.commit()
-        except exc.IntegrityError:
+        except exc.IntegrityError as e:
             db_session.rollback()
-            raise HTTPException(
-                status_code=409,
-                detail="Resource already exists",
-            )
+            handle_integrity_error(e)
+
         await db_session.refresh(db_obj)
         return db_obj
 
