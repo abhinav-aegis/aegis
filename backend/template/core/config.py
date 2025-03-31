@@ -1,12 +1,12 @@
 from backend.common.core.config import Settings, SettingsConfigDict
 
-class AgentSettings(Settings):
+class ServiceSettings(Settings):
     model_config = SettingsConfigDict(
         case_sensitive=True,
         env_file=".env",
         env_ignore_empty=True,
         extra="ignore"
     )
-    PROJECT_NAME: str = "Data Pipeline Microservice"
+    PROJECT_NAME: str = "Template Microservice"
 
-settings = AgentSettings()
+settings = ServiceSettings()

@@ -69,4 +69,5 @@ dev = [
     "jupyter>=1.1.1",
     "autogenstudio==0.4.1.11",
     "aiosqlite>=0.21.0",
+    "datamodel-code-generator>=0.28.5",
 ]

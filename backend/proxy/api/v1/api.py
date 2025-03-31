@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.proxy.api.v1.endpoints import (
+from backend.template.api.v1.endpoints import (
     auth,
     chat
 )

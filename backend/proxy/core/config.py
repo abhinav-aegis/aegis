@@ -1,6 +1,6 @@
 from backend.common.core.config import Settings, SettingsConfigDict
 
-class AgentSettings(Settings):
+class ServiceSettings(Settings):
     model_config = SettingsConfigDict(
         case_sensitive=True,
         env_file=".env",
@@ -9,4 +9,4 @@ class AgentSettings(Settings):
     )
     PROJECT_NAME: str = "Proxy Microservice"
 
-settings = AgentSettings()
+settings = ServiceSettings()
