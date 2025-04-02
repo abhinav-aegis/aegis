@@ -1,28 +1,134 @@
+from datetime import datetime
+from typing import Optional, List, Dict, Any, Tuple
 from uuid import UUID
-from sqlmodel import (
-    SQLModel, Field, Column, Float,
-    String, Boolean
-)
-from typing import Optional
+
+from sqlalchemy import Column, DateTime, ForeignKey
+from sqlmodel import Field, Relationship, JSON, SQLModel
+from enum import Enum
+
 from backend.common.models.base_uuid_model import BaseUUIDModel
 
 
-class LLMAPIKeyBase(SQLModel):
-    """
-    Stores API keys issued for authentication, linked to a tenant and optionally a user or group.
-    """
-    tenant_id: UUID = Field(nullable=False)  # Required for multi-tenancy
-    user_id: Optional[UUID] = Field(default=None, nullable=True)  # Optional, per user
-    group_id: Optional[UUID] = Field(default=None, nullable=True)  # Optional, per group
-    provider: str = Field(nullable=False)  # Provider (e.g., "openai", "anthropic")
-    is_active: bool = Field(default=True, sa_column=Column(Boolean, nullable=False))
+# ---------- Enums ----------
 
-    # Aggregated usage tracking
-    total_input_tokens: int = Field(default=0, nullable=False)
-    total_output_tokens: int = Field(default=0, nullable=False)
-    total_cost: float = Field(default=0.0, sa_column=Column(Float, nullable=False))
+class EvaluationJobStatus(str, Enum):
+    PENDING = "PENDING"
+    RUNNING = "RUNNING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
 
-class LLMAPIKey(BaseUUIDModel, LLMAPIKeyBase, table=True):
-    api_key: str = Field(
-        sa_column=Column(String, unique=True, nullable=False, index=True)
+
+class FeedbackType(str, Enum):
+    POSITIVE = "positive"
+    NEGATIVE = "negative"
+    RATING = "rating"
+
+
+# ---------- Ground Truth Dataset ----------
+
+class GroundTruthDatasetBase(SQLModel):
+    """
+    Metadata about a Ground Truth Dataset.
+    """
+    task_id: UUID = Field(nullable=False, index=True)
+    name: str = Field(nullable=False)
+    description: Optional[str] = Field(default=None)
+    label_uri: Optional[str] = Field(default=None)
+
+
+class GroundTruthDataset(GroundTruthDatasetBase, BaseUUIDModel, table=True):
+    items: List["GroundTruthItem"] = Relationship(
+        back_populates="dataset", sa_relationship_kwargs={"lazy": "selectin"}
     )
+
+
+class GroundTruthItemBase(SQLModel):
+    """
+    Stores a single labeled input.
+    """
+    dataset_id: UUID = Field(ForeignKey("groundtruthdataset.id", ondelete="CASCADE"), nullable=False, index=True)
+    tenant_id: Optional[UUID] = Field(nullable=True, index=True)
+    input_uri: str = Field(nullable=False)
+    ground_truth_label: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
+
+
+class GroundTruthItem(GroundTruthItemBase, BaseUUIDModel, table=True):
+    dataset: Optional[GroundTruthDataset] = Relationship(
+        back_populates="items", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+
+
+# ---------- Evaluation Job ----------
+
+class EvaluationJobBase(SQLModel):
+    """
+    Represents a batch evaluation job.
+    """
+    tenant_id: Optional[UUID] = Field(nullable=True, index=True)
+    task_id: UUID = Field(nullable=False, index=True)
+    dataset_id: Optional[UUID] = Field(ForeignKey("groundtruthdataset.id", ondelete="SET NULL"), nullable=True, index=True)
+    team_ids: List[UUID] = Field(sa_column=Column(JSON, nullable=False))
+    metrics: List[str] = Field(sa_column=Column(JSON, nullable=False))
+    status: EvaluationJobStatus = Field(default=EvaluationJobStatus.PENDING, nullable=False)
+    completed_at: Optional[datetime] = Field(default=None, sa_column=Column(DateTime(timezone=True)))
+    evaluation_component: Dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+
+
+class EvaluationJob(EvaluationJobBase, BaseUUIDModel, table=True):
+    results: List["EvaluationResult"] = Relationship(
+        back_populates="job", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+
+
+# ---------- Evaluation Result ----------
+
+class EvaluationResultBase(SQLModel):
+    """
+    Stores evaluation score per session/team.
+    """
+    job_id: UUID = Field(ForeignKey("evaluationjob.id", ondelete="CASCADE"), nullable=False, index=True)
+    session_id: UUID = Field(nullable=False, index=True)
+    team_id: UUID = Field(nullable=False, index=True)
+    metric_name: str = Field(nullable=False, index=True)
+    score: float = Field(nullable=False)
+    std_dev: Optional[float] = Field(default=None)
+    confidence_interval: Optional[Tuple[float, float]] = Field(default=None, sa_column=Column(JSON, nullable=True))
+
+
+class EvaluationResult(EvaluationResultBase, BaseUUIDModel, table=True):
+    job: Optional[EvaluationJob] = Relationship(
+        back_populates="results", sa_relationship_kwargs={"lazy": "selectin"}
+    )
+
+
+# ---------- Evaluation Cache ----------
+
+class EvaluationCacheBase(SQLModel):
+    """
+    Caches expensive evaluation results.
+    """
+    evaluator_config_hash: str = Field(nullable=False, index=True)
+    input_hash: str = Field(nullable=False, index=True)
+    result: Dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+
+
+class EvaluationCache(EvaluationCacheBase, BaseUUIDModel, table=True):
+    pass
+
+
+# ---------- User Feedback ----------
+
+class UserFeedbackBase(SQLModel):
+    """
+    Captures human feedback on evaluations.
+    """
+    tenant_id: Optional[UUID] = Field(nullable=True, index=True)
+    session_id: Optional[UUID] = Field(nullable=True, index=True)
+    team_id: Optional[UUID] = Field(nullable=True, index=True)
+    feedback_type: FeedbackType = Field(nullable=False)
+    rating: Optional[float] = Field(default=None)
+    comments: Optional[str] = Field(default=None)
+
+
+class UserFeedback(UserFeedbackBase, BaseUUIDModel, table=True):
+    pass

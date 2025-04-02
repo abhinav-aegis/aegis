@@ -81,7 +81,7 @@ repos:
         args:
           - -r
           - --exclude
-          - backend/migrations,backend/gateway/tests,backend/agents/tests,backend/data/tests,backend/proxy/tests
+          - backend/migrations,backend/gateway/tests,backend/agents/tests,backend/storage/tests,backend/proxy/tests,backend/evals/tests
           - backend
 
   # prettier - for JS, CSS, JSON, Markdown

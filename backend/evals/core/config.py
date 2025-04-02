@@ -7,6 +7,6 @@ class ServiceSettings(Settings):
         env_ignore_empty=True,
         extra="ignore"
     )
-    PROJECT_NAME: str = "Template Microservice"
+    SERVICE_NAME: str = "evals"
 
 settings = ServiceSettings()

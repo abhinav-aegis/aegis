@@ -27,6 +27,14 @@
       "module": "uvicorn",
       "args": ["backend.proxy.main:app", "--reload", "--port", "8002"],
       "jinja": true
+    },
+    {
+      "name": "Python Debugger: Evals",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["backend.evals.main:app", "--reload", "--port", "8003"],
+      "jinja": true
     }
   ]
 }

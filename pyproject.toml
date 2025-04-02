@@ -71,3 +71,7 @@ dev = [
     "aiosqlite>=0.21.0",
     "datamodel-code-generator>=0.28.5",
 ]
+evals = [
+    "ragas>=0.2.14",
+    "scikit-learn>=1.6.1",
+]

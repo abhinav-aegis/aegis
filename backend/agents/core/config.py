@@ -7,6 +7,6 @@ class AgentSettings(Settings):
         env_ignore_empty=True,
         extra="ignore"
     )
-    PROJECT_NAME: str = "Agents Microservice"
+    SERVICE_NAME: str = "agents"
 
 settings = AgentSettings()

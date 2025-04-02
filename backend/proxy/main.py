@@ -12,7 +12,8 @@ from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
 
 from backend.common.deps.service_deps import get_redis_client
 from backend.proxy.api.v1.api import api_router as api_router_v1
-from backend.common.core.config import ModeEnum, settings
+from backend.common.core.config import ModeEnum
+from backend.proxy.core.config import settings
 from backend.common.utils.fastapi_globals import GlobalsMiddleware, g
 
 
@@ -30,7 +31,7 @@ async def lifespan(app: FastAPI):
 
 # Core Application Instance
 app = FastAPI(
-    title=settings.PROJECT_NAME,
+    title=settings.SERVICE_NAME,
     version=settings.API_VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan,
@@ -71,7 +72,7 @@ class CustomException(Exception):
 
 @app.get("/")
 async def root():
-    return {"proxy": True}
+    return {settings.SERVICE_NAME: True}
 
 
 # Add Routers

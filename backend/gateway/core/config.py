@@ -7,6 +7,6 @@ class ServiceSettings(Settings):
         env_ignore_empty=True,
         extra="ignore"
     )
-    SERVICE_NAME: str = "Template Microservice"
+    SERVICE_NAME: str = "gateway"
 
 settings = ServiceSettings()

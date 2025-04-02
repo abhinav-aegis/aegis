@@ -26,7 +26,8 @@ from starlette.middleware.cors import CORSMiddleware
 from backend.gateway import crud
 from backend.gateway.api.deps import get_redis_client
 from backend.gateway.api.v1.api import api_router as api_router_v1
-from backend.common.core.config import ModeEnum, settings
+from backend.common.core.config import ModeEnum
+from backend.gateway.core.config import settings
 from backend.common.core.security import decode_token
 from backend.gateway.schema.common_schema import IChatResponse, IUserMessage
 from backend.common.utils.fastapi_globals import GlobalsMiddleware, g
