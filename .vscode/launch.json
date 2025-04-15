@@ -35,6 +35,14 @@
       "module": "uvicorn",
       "args": ["backend.evals.main:app", "--reload", "--port", "8003"],
       "jinja": true
+    },
+    {
+      "name": "Python Debugger: Storage",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": ["backend.storage.main:app", "--reload", "--port", "8004"],
+      "jinja": true
     }
   ]
 }

@@ -52,6 +52,24 @@ class Settings(BaseSettings):
                 )
         return v
 
+    SYNC_DATABASE_URI: PostgresDsn | str = ""
+
+    @field_validator("SYNC_DATABASE_URI", mode="after")
+    def assemble_sync_db_connection(
+        cls, v: str | None, info: FieldValidationInfo
+    ) -> Any:
+        if isinstance(v, str):
+            if v == "":
+                return PostgresDsn.build(
+                    scheme="postgresql+psycopg2",
+                    username=info.data["DATABASE_USER"],
+                    password=info.data["DATABASE_PASSWORD"],
+                    host=info.data["DATABASE_HOST"],
+                    port=info.data["DATABASE_PORT"],
+                    path=info.data["DATABASE_NAME"],
+                )
+        return v
+
     ASYNC_TEST_DATABASE_URI: str = "sqlite+aiosqlite:///:memory:"
 
     # @field_validator("ASYNC_TEST_DATABASE_URI", mode="after")

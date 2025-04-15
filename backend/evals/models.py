@@ -29,6 +29,8 @@ class FeedbackType(str, Enum):
 class GroundTruthDatasetBase(SQLModel):
     """
     Metadata about a Ground Truth Dataset.
+
+    Contains labeled examples for evaluating agent performance.
     """
     task_id: UUID = Field(nullable=False, index=True)
     name: str = Field(nullable=False)
@@ -44,11 +46,13 @@ class GroundTruthDataset(GroundTruthDatasetBase, BaseUUIDModel, table=True):
 
 class GroundTruthItemBase(SQLModel):
     """
-    Stores a single labeled input.
+    Stores a single labeled data pair.
+
+    Contains composite input keys and expected evaluation label.
     """
     dataset_id: UUID = Field(ForeignKey("groundtruthdataset.id", ondelete="CASCADE"), nullable=False, index=True)
     tenant_id: Optional[UUID] = Field(nullable=True, index=True)
-    input_uri: str = Field(nullable=False)
+    input_uri: Dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
     ground_truth_label: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
 
 
@@ -62,7 +66,7 @@ class GroundTruthItem(GroundTruthItemBase, BaseUUIDModel, table=True):
 
 class EvaluationJobBase(SQLModel):
     """
-    Represents a batch evaluation job.
+    Represents an evaluation batch job.
     """
     tenant_id: Optional[UUID] = Field(nullable=True, index=True)
     task_id: UUID = Field(nullable=False, index=True)
@@ -85,6 +89,8 @@ class EvaluationJob(EvaluationJobBase, BaseUUIDModel, table=True):
 class EvaluationResultBase(SQLModel):
     """
     Stores evaluation score per session/team.
+
+    Links to Evaluation Job and Dataset.
     """
     job_id: UUID = Field(ForeignKey("evaluationjob.id", ondelete="CASCADE"), nullable=False, index=True)
     session_id: UUID = Field(nullable=False, index=True)
@@ -93,6 +99,7 @@ class EvaluationResultBase(SQLModel):
     score: float = Field(nullable=False)
     std_dev: Optional[float] = Field(default=None)
     confidence_interval: Optional[Tuple[float, float]] = Field(default=None, sa_column=Column(JSON, nullable=True))
+    dataset_id: Optional[UUID] = Field(ForeignKey("groundtruthdataset.id", ondelete="SET NULL"), nullable=True, index=True)
 
 
 class EvaluationResult(EvaluationResultBase, BaseUUIDModel, table=True):
@@ -121,6 +128,8 @@ class EvaluationCache(EvaluationCacheBase, BaseUUIDModel, table=True):
 class UserFeedbackBase(SQLModel):
     """
     Captures human feedback on evaluations.
+
+    Can later be used to filter or improve Golden Datasets.
     """
     tenant_id: Optional[UUID] = Field(nullable=True, index=True)
     session_id: Optional[UUID] = Field(nullable=True, index=True)

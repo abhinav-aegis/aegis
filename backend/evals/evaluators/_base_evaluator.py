@@ -25,6 +25,13 @@ class FieldExtractionConfig(BaseModel):
     ground_truth_field: str
     prediction_field: str
 
+class DatasetInputConfig(BaseModel):
+    """
+    Configuration to specify how evaluation inputs are mapped to GroundTruth Dataset.
+    """
+    dataset_id: str  # ID of the GroundTruthDataset
+    input_fields: Dict[str, str]  # Maps input names to GroundTruthItem.input_uri fields
+    label_field: str  # Field path for the ground truth label
 
 class MetricFunctionConfig(BaseModel):
     """
@@ -48,7 +55,7 @@ class EvaluatorConfig(BaseModel):
     provider: str
     extraction: FieldExtractionConfig
     metric: MetricFunctionConfig
-
+    dataset_inputs: Optional[DatasetInputConfig] = None
 
 class EvaluationResult(BaseModel):
     """

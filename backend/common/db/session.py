@@ -4,6 +4,8 @@ from backend.common.core.config import ModeEnum, settings
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.pool import NullPool, AsyncAdaptedQueuePool
+from sqlmodel import create_engine, Session
+from typing import Iterator
 
 DB_POOL_SIZE = 83
 WEB_CONCURRENCY = 9
@@ -48,3 +50,16 @@ SessionLocalCelery = sessionmaker( # type: ignore
     class_=AsyncSession,
     expire_on_commit=False,
 )
+
+
+sync_engine = create_engine(
+    str(settings.SYNC_DATABASE_URI),
+    echo=False,
+    pool_size=10,
+    max_overflow=20,
+)
+
+# Use this wherever you need a session
+def get_sync_session() -> Iterator[Session]:
+    with Session(sync_engine) as session:
+        yield session

@@ -2,3 +2,4 @@
 - Create single env file for infrasture and code
 - Dockerfile for each microservice (dev and prod)
 - Optimise multi-paginated query response so that all foreign key objects are not loaded from the DB.
+- Encrypt API key before saving in DB

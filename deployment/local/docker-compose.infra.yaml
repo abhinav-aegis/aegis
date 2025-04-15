@@ -46,8 +46,8 @@ services:
     image: vespaengine/vespa:8.277.17
     restart: always
     ports:
-      - "19071"
-      - "8081"
+      - "19071:19071"
+      - "8081:8081"
     volumes:
       - vespa_volume:/opt/vespa/var
     logging:
