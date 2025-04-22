@@ -9,7 +9,7 @@ from sqlmodel import SQLModel  # Import SQLModel for metadata
 from backend.gateway.models import * # noqa
 from backend.proxy.models import * # noqa
 from backend.agents.models import * # noqa
-from backend.storage.models import * # noqa
+# from backend.storage.models import * # noqa
 from backend.evals.models import * # noqa
 
 # this is the Alembic Config object, which provides

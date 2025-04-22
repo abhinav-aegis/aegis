@@ -1,7 +1,12 @@
 from uuid import UUID
 from backend.common.utils.partial import optional
-from backend.proxy.models import LLMAPIKeyBase, LLMUsageBase, LLMErrorLogBase
-
+from backend.proxy.models import (
+    LLMStubReplaySequenceBase,
+    LLMStubRequestResponseBase,
+    LLMAPIKeyBase,
+    LLMUsageBase,
+    LLMErrorLogBase
+)
 
 # --- 🔹 API Key Schemas ---
 class ILLMAPIKeyCreate(LLMAPIKeyBase):
@@ -82,4 +87,27 @@ class ILLMErrorLogList(LLMErrorLogBase):
     """
     Paginated response schema for listing LLM error logs.
     """
+    id: UUID
+
+# --- 🔹 LLM Stub Replay Sequence Schemas ---
+class ILLMStubReplaySequenceCreate(LLMStubReplaySequenceBase):
+    pass
+
+@optional()
+class ILLMStubReplaySequenceUpdate(LLMStubReplaySequenceBase):
+    pass
+
+class ILLMStubReplaySequenceRead(LLMStubReplaySequenceBase):
+    id: UUID
+
+# --- 🔹 LLM Stub Request Response Schemas ---
+class ILLMStubRequestResponseCreate(LLMStubRequestResponseBase):
+    class Config:
+        request_hash = None
+
+@optional()
+class ILLMStubRequestResponseUpdate(LLMStubRequestResponseBase):
+    pass
+
+class ILLMStubRequestResponseRead(LLMStubRequestResponseBase):
     id: UUID

@@ -52,7 +52,7 @@ class GroundTruthItemBase(SQLModel):
     """
     dataset_id: UUID = Field(ForeignKey("groundtruthdataset.id", ondelete="CASCADE"), nullable=False, index=True)
     tenant_id: Optional[UUID] = Field(nullable=True, index=True)
-    input_uri: Dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))
+    input_data: Dict[str, Any] = Field(sa_column=Column(JSON, nullable=False))  # Key-value pairs for input data. Allows reconstruction of StructuredData from Autogen
     ground_truth_label: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON, nullable=True))
 
 

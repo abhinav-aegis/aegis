@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 from uuid import UUID
 from backend.common.utils.partial import optional
 from backend.agents.models import (
@@ -78,6 +78,7 @@ class IRunRead(RunBase):
     status: RunStatus
     team_result: Optional[Union[TeamResult, dict]]
     error_message: Optional[str]
+    error_details: Optional[Dict[str, str | None]]
     created_at: Optional[datetime]
     estimated_completion_time: Optional[datetime]
 

@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from enum import Enum
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Dict
 from uuid import UUID
 from pydantic import types as pydantic_types
 from autogen_core import ComponentModel
@@ -156,6 +156,7 @@ class Run(RunBase, BaseUUIDModel, table=True):
     status: RunStatus = Field(default=RunStatus.CREATED)
     team_result: Optional[Union[TeamResult, dict]] = Field(default=None, sa_column=Column(JSON, nullable=True))
     error_message: Optional[str] = None
+    error_details: Optional[Dict[str, str | None]] = Field(default=None, sa_column=Column(JSON, nullable=True))
     created_at: pydantic_types.AwareDatetime | None = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         sa_column=Column(DateTime(timezone=True), nullable=False, index=True),
@@ -164,7 +165,6 @@ class Run(RunBase, BaseUUIDModel, table=True):
         default=None,
         sa_column=Column(DateTime(timezone=True), nullable=True),
     )
-
     task: Optional["Task"] = Relationship(
         sa_relationship_kwargs={"lazy": "joined"}
     )

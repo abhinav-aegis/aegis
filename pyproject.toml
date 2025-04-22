@@ -40,6 +40,9 @@ dependencies = [
     "openinference-instrumentation-autogen>=0.1.6",
     "langchain-community>=0.3.19",
     "retry>=0.9.2",
+    "autogen_core>=0.5",
+    "autogen-ext[openai]>=0.5",
+    "autogen-agentchat>=0.5",
 ]
 
 [project.optional-dependencies]
@@ -47,8 +50,6 @@ proxy = [
     "litellm>=1.61.8",
 ]
 agents = [
-    "autogen-agentchat>=0.4.2",
-    "autogen-ext>=0.4.2",
     "langchain>=0.3.20",
 ]
 data-pipeline = [
@@ -68,7 +69,6 @@ dev = [
     "bandit>=1.8.3",
     "pytest-asyncio>=0.23.8",
     "jupyter>=1.1.1",
-    "autogenstudio==0.4.1.11",
     "aiosqlite>=0.21.0",
     "datamodel-code-generator>=0.28.5",
 ]
